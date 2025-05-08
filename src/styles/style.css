@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-*: initial;
+
+  --color-purple-100: #ecc9ff;
+  --color-purple-200: #e6bbff;
+  --color-purple-300: #e0acff;
+  --color-purple-400: #c67efe;
+  --color-purple-500: #9d4edd;
+  --color-purple-600: #7b2bbe;
+  --color-purple-700: #5a199b;
+  --color-purple-800: #3c0a6d;
+  --color-purple-900: #240046;
+  --color-purple-950: #11002c;
+
+  --color-cream: #fff9af;
+
+  --text-heading1: 2rem;
+  --text-heading2: 1.75rem;
+  --text-heading3: 1.5rem;
+  --text-heading4: 1.25rem;
+  --text-heading5: 1rem;
+  --text-body: 1rem;
+
+  --font-poppins: "Poppins", sans-serif;
+}
