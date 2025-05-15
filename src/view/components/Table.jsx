@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/view/components/ui/table";
 
-import "./styles/style.css";
+import "../../styles/style.css";
 
 function TableComponent() {
   return (

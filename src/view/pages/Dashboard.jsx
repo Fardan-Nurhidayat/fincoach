@@ -1,9 +1,8 @@
-import TableComponent from "../../view/components/Table";
 
-function Dashboard {
+export default function Dashboard() {
   return (
     <div>
-      <TableComponent />
+      <p>Lorem, ipsum.</p>
     </div>
   );
 }
