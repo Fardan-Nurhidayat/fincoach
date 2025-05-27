@@ -8,7 +8,7 @@ export default function Welcome() {
   return (
     <>
       <Hero />
-      <TentangKami />
+      {/* <TentangKami /> */}
       <Fitur />
       <Simulasi />
       <KontakForm />
