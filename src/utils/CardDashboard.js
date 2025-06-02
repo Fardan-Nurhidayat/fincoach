@@ -8,6 +8,7 @@ let profilResiko = {
 
 let pemasukan = {
   jumlah: 1000000,
+  sumber: "Gaji Bulanan",
 };
 
 let pengeluaran = {
@@ -16,7 +17,7 @@ let pengeluaran = {
 };
 
 let tabungan = {
-  jumlah: 300000,
+  jumlah: 100000,
   limit: (profilResiko.tabungan / 100) * pemasukan.jumlah,
 };
 
