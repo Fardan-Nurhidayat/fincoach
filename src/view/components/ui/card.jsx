@@ -6,7 +6,7 @@ function Card({ className, ...props }) {
   return (
     <div
       data-slot='card'
-      className={`${className} text-card-foreground flex flex-col gap-6 rounded-xl border border-purple-400 py-6 shadow-sm`}
+      className={`text-card-foreground flex flex-col gap-6 rounded-xl border border-purple-400 py-6 shadow-sm ${className}`}
       {...props}
     />
   );
@@ -16,9 +16,7 @@ function CardHeader({ className, ...props }) {
   return (
     <div
       data-slot='card-header'
-      className={
-        "@container/card-header text-purple-950 grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
-      }
+      className={`@container/card-header  text-purple-950 grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 ${className}`}
       {...props}
     />
   );
@@ -38,7 +36,7 @@ function CardDescription({ className, ...props }) {
   return (
     <div
       data-slot='card-description'
-      className={"text-purple-950 text-sm"}
+      className={` text-purple-950 text-sm ${className}`}
       {...props}
     />
   );
