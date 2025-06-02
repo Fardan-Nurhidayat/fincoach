@@ -74,7 +74,6 @@ export default function CardSection() {
         prev.limit +
         (parseInt(newPemasukan, 10) * profilResiko.investasi) / 100,
     }));
-    setPemakaian(prev => prev + parseInt(newPemasukan, 10));
     // Reset form fields
     toast.success(
       `Pemasukan Rp. ${newPemasukan.toLocaleString(
