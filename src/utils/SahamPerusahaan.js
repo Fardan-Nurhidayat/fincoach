@@ -1,0 +1,50 @@
+export const sahamPerusahaanData = {
+  perusahaan: [
+    {
+      nama: "PT ABC",
+      saldo: 15000000,
+      data: [
+        { bulan: 1, nilai: 1000000 },
+        { bulan: 2, nilai: 1200000 },
+        { bulan: 3, nilai: 1300000 },
+        { bulan: 4, nilai: 1000000 },
+        { bulan: 5, nilai: 1200000 },
+        { bulan: 6, nilai: 1300000 },
+        { bulan: 7, nilai: 1000000 },
+        { bulan: 8, nilai: 1200000 },
+        { bulan: 9, nilai: 1300000 },
+        { bulan: 10, nilai: 1000000 },
+        { bulan: 11, nilai: 1200000 },
+        { bulan: 12, nilai: 1300000 },
+      ],
+      prediksi: {
+        harian: { nilai: 1340000, naik: true },
+        mingguan: { nilai: 1365000, naik: true },
+        bulanan: { bulan: 6, nilai: 1400000, naik: false },
+      },
+    },
+    {
+      nama: "PT XYZ",
+      saldo: 20000000,
+      data: [
+        { bulan: 1, nilai: 1400000 },
+        { bulan: 2, nilai: 1500000 },
+        { bulan: 3, nilai: 1600000 },
+        { bulan: 4, nilai: 1700000 },
+        { bulan: 5, nilai: 1200000 },
+        { bulan: 6, nilai: 1800000 },
+        { bulan: 7, nilai: 1900000 },
+        { bulan: 8, nilai: 1250000 },
+        { bulan: 9, nilai: 1350000 },
+        { bulan: 10, nilai: 1710000 },
+        { bulan: 11, nilai: 1670000 },
+        { bulan: 12, nilai: 1780000 },
+      ],
+      prediksi: {
+        harian: { nilai: 1340000, naik: true },
+        mingguan: { nilai: 1365000, naik: true },
+        bulanan: { bulan: 6, nilai: 1400000, naik: false },
+      },
+    },
+  ],
+};
