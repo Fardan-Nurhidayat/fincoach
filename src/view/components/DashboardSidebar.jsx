@@ -14,7 +14,7 @@ const DashboardSidebar = () => {
       <div className="mb-6">
         <div className="flex items-center space-x-2">
           {/* Placeholder Logo */}
-          <div className='size-7 rounded-full bg-gradient-to-br from-purple-600 to-purple-200' />
+          <div className="size-7 rounded-full bg-gradient-to-br from-purple-600 to-purple-200" />
           <span className="text-xl font-bold">FinCoach</span>
         </div>
       </div>
@@ -23,7 +23,11 @@ const DashboardSidebar = () => {
       <div className="flex flex-col items-center gap-y-3 my-6">
         {/* Placeholder Avatar */}
         <div className="w-10 h-10 bg-white rounded-full">
-          <img src="https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png" alt="User Avatar" className="w-full h-full rounded-full" />
+          <img
+            src="https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png"
+            alt="User Avatar"
+            className="w-full h-full rounded-full"
+          />
         </div>
         <div>
           <p className="font-semibold">John Doe</p>
@@ -34,8 +38,17 @@ const DashboardSidebar = () => {
 
       {/* Navigation Links */}
       <nav className="flex flex-col space-y-2 flex-1">
-        <Button variant="ghost" className="justify-start text-white hover:bg-white">
+        <Button
+          variant="ghost"
+          className="justify-start text-white hover:bg-white"
+        >
           <span className="mr-2">📊</span> Dashboard
+        </Button>
+        <Button
+          variant="ghost"
+          className="justify-start text-white hover:bg-white"
+        >
+          <span className="mr-2">📊</span> Investasi
         </Button>
 
         {/* Yields with Dropdown */}
@@ -48,15 +61,25 @@ const DashboardSidebar = () => {
             <span className="flex items-center">
               <span className="mr-5">💰</span> Yields
             </span>
-            <ChevronDownIcon className={`w-4 h-4 transition-transform ${isYieldsOpen ? 'rotate-180' : ''}`} />
+            <ChevronDownIcon
+              className={`w-4 h-4 transition-transform ${
+                isYieldsOpen ? "rotate-180" : ""
+              }`}
+            />
           </Button>
           {isYieldsOpen && (
             <div className="ml-6 flex flex-col space-y-1 mt-1">
               {/* Placeholder Dropdown Items */}
-              <Button variant="ghost" className="justify-start text-gray-300 hover:bg-white text-sm">
+              <Button
+                variant="ghost"
+                className="justify-start text-gray-300 hover:bg-white text-sm"
+              >
                 Yield Farm 1
               </Button>
-              <Button variant="ghost" className="justify-start text-gray-300 hover:bg-white text-sm">
+              <Button
+                variant="ghost"
+                className="justify-start text-gray-300 hover:bg-white text-sm"
+              >
                 Yield Farm 2
               </Button>
             </div>
@@ -73,26 +96,41 @@ const DashboardSidebar = () => {
             <span className="flex items-center">
               <span className="mr-5">💱</span> DEXes
             </span>
-            <ChevronDownIcon className={`w-4 h-4 transition-transform ${isDexesOpen ? 'rotate-180' : ''}`} />
+            <ChevronDownIcon
+              className={`w-4 h-4 transition-transform ${
+                isDexesOpen ? "rotate-180" : ""
+              }`}
+            />
           </Button>
           {isDexesOpen && (
             <div className="ml-6 flex flex-col space-y-1 mt-1">
               {/* Placeholder Dropdown Items */}
-              <Button variant="ghost" className="justify-start text-gray-300 hover:bg-white text-sm">
+              <Button
+                variant="ghost"
+                className="justify-start text-gray-300 hover:bg-white text-sm"
+              >
                 DEX 1
               </Button>
-              <Button variant="ghost" className="justify-start text-gray-300 hover:bg-white text-sm">
+              <Button
+                variant="ghost"
+                className="justify-start text-gray-300 hover:bg-white text-sm"
+              >
                 DEX 2
               </Button>
             </div>
           )}
         </div>
 
-
-        <Button variant="ghost" className="justify-start text-white hover:bg-white">
+        <Button
+          variant="ghost"
+          className="justify-start text-white hover:bg-white"
+        >
           <span className="mr-2">📜</span> Protocols
         </Button>
-        <Button variant="ghost" className="justify-start text-white hover:bg-white">
+        <Button
+          variant="ghost"
+          className="justify-start text-white hover:bg-white"
+        >
           <span className="mr-2">⚙️</span> Settings
         </Button>
       </nav>
@@ -100,7 +138,10 @@ const DashboardSidebar = () => {
       <Separator className="bg-white my-4" />
 
       {/* Log Out Button */}
-      <Button variant="ghost" className="justify-start text-white hover:bg-white">
+      <Button
+        variant="ghost"
+        className="justify-start text-white hover:bg-white"
+      >
         <span className="mr-2">➡️</span> Log out
       </Button>
     </aside>
