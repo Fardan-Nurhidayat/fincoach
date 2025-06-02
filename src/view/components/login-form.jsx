@@ -12,6 +12,7 @@ import { Label } from "@/view/components/ui/label";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useState } from "react";
+import { Link } from "react-router";
 
 export function LoginForm({ className, ...props }) {
   const [ formData, setFormData ] = useState({
@@ -100,11 +101,11 @@ export function LoginForm({ className, ...props }) {
                   </div>
                   <div className='mt-4 text-center text-sm text-purple-950'>
                     Belum punya akun?{" "}
-                    <a
-                      href='/register'
+                    <Link
+                      to='/register'
                       className='underline underline-offset-4'>
                       Daftar
-                    </a>
+                    </Link>
                   </div>
                 </form>
               </CardContent>

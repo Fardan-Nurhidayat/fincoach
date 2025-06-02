@@ -10,6 +10,7 @@ import {
 import { Input } from "@/view/components/ui/input";
 import { Label } from "@/view/components/ui/label";
 import { registerUser } from "@/utils/api";
+import { Link } from "react-router";
 
 const registerHandler = async e => {
   e.preventDefault();
@@ -83,13 +84,14 @@ export function RegisterForm({ className, ...props }) {
                       </Button>
                     </div>
                   </div>
-                  <div className='mt-4 text-center text-sm text-purple-950'>
+                  <div className='text-center text-sm text-purple-950'>
                     Sudah punya akun?{" "}
-                    <a
-                      href='/login'
+                    <Link
+                      to='/login'
+                      aria-label='Masuk'
                       className='underline underline-offset-4'>
                       Masuk
-                    </a>
+                    </Link>
                   </div>
                 </form>
               </CardContent>
