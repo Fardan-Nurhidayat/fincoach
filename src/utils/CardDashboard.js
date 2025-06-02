@@ -21,7 +21,7 @@ let tabungan = {
 };
 
 let investasi = {
-  jumlah: 500000,
+  jumlah: 100000,
   limit: (profilResiko.investasi / 100) * pemasukan.jumlah,
 };
 
