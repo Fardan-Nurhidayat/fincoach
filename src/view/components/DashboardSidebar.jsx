@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Button } from '../components/ui/button';
 import { Separator } from '../components/ui/separator';
 import { ChevronDownIcon } from '@radix-ui/react-icons'; // Example icon, you might need to install @radix-ui/react-icons
+import { Link } from 'react-router';
 
 const DashboardSidebar = () => {
   // Placeholder for dropdown state
   const [isYieldsOpen, setIsYieldsOpen] = useState(false);
+  const [investasiOpen, setIsInvestasiOpen] = useState(false);
   const [isDexesOpen, setIsDexesOpen] = useState(false);
 
   return (
@@ -44,12 +46,41 @@ const DashboardSidebar = () => {
         >
           <span className="mr-2">📊</span> Dashboard
         </Button>
-        <Button
-          variant="ghost"
-          className="justify-start text-white hover:bg-white"
-        >
-          <span className="mr-2">📊</span> Investasi
-        </Button>
+
+        {/* Yields with Dropdown */}
+        <div>
+          <Button
+            variant="ghost"
+            className="text-white hover:bg-white w-full flex items-center justify-between"
+            onClick={() => setIsInvestasiOpen(!investasiOpen)}
+          >
+            <span className="flex items-center">
+              <span className="mr-5">💰</span> Investasi
+            </span>
+            <ChevronDownIcon
+              className={`w-4 h-4 transition-transform ${
+                investasiOpen ? "rotate-180" : ""
+              }`}
+            />
+          </Button>
+          {investasiOpen && (
+            <div className="ml-6 flex flex-col space-y-1 mt-1">
+              {/* Placeholder Dropdown Items */}
+              <Button
+                variant="ghost"
+                className="justify-start text-gray-300 hover:bg-white text-sm"
+              >
+                <Link to="/investasi">Investasi</Link>
+              </Button>
+              <Button
+                variant="ghost"
+                className="justify-start text-gray-300 hover:bg-white text-sm"
+              >
+                <Link to="/saham-perusahaan">Saham Perusahaan</Link>
+              </Button>
+            </div>
+          )}
+        </div>
 
         {/* Yields with Dropdown */}
         <div>

@@ -4,6 +4,8 @@ import Welcome from "./view/pages/Welcome";
 import { LoginForm } from "./view/components/login-form";
 import { RegisterForm } from "./view/components/register-form";
 import Dashboard from "./view/pages/Dashboard";
+import Investasi from "./view/pages/investasi";
+import SahamPerusahaan from "./view/pages/SahamPerusahaan";
 
 const App = () => (
   <BrowserRouter>
@@ -23,6 +25,14 @@ const App = () => (
       <Route
         path='/dashboard'
         element={<Dashboard />}
+      />
+      <Route
+        path='/investasi'
+        element={<Investasi/>}
+      />
+      <Route
+        path='/saham-perusahaan'
+        element={<SahamPerusahaan/>}
       />
     </Routes>
   </BrowserRouter>
