@@ -7,8 +7,16 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
 import { useState } from "react";
-import { Card, CardContent } from "./ui/card";
 import { sahamPerusahaanData } from "../../utils/SahamPerusahaan";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
@@ -47,10 +55,15 @@ const PrediksiSahamCard = () => {
       label: "1 Bulan",
       data: prediksi.bulanan,
     },
-  ];  
+  ];
 
   return (
-    <Card className="border-0 hover:border-purple-300/50">
+    <Card className="border hover:border-purple-300/50 transition duration-300 shadow-md hover:shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-xl text-purple-600 font-bold">
+          Statistik Saham
+        </CardTitle>
+      </CardHeader>
       <CardContent>
         <div className="mb-4">
           <label className="text-sm text-gray-600 block mb-1">
@@ -68,19 +81,11 @@ const PrediksiSahamCard = () => {
             ))}
           </select>
         </div>
-
-        <h2 className="text-xl font-bold mb-4">Saham Perusahaan</h2>
-
-        <div className="h-56 mb-6">
+        {/* Chart */}
+        <div className="h-56 mb-8">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
-              <Line
-                type="monotone"
-                dataKey="nilai"
-                stroke="#5a199b"
-                strokeWidth={2}
-              />
-              <CartesianGrid stroke="#ecc9ff" strokeDasharray="5 5" />
+              <CartesianGrid stroke="#f3e8ff" strokeDasharray="4 4" />
               <XAxis
                 dataKey="bulan"
                 tickFormatter={(bulan) => monthNames[bulan]}
@@ -92,6 +97,12 @@ const PrediksiSahamCard = () => {
                   `Rp ${nilai.toLocaleString("id-ID")}`,
                   "Nilai",
                 ]}
+              />
+              <Line
+                type="monotone"
+                dataKey="nilai"
+                stroke="#9333ea"
+                strokeWidth={2}
               />
             </LineChart>
           </ResponsiveContainer>

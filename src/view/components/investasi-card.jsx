@@ -7,7 +7,15 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
 import { investasi } from "../../utils/Investasi";
 
 const chartData = investasi.data;
@@ -31,29 +39,26 @@ const monthNames = [
 
 const InvestasiCard = () => {
   return (
-    <Card className="border-0 hover:border-purple-300/50 cursor-pointer hover:-translate-y-2.5 duration-300">
+    <Card className="border hover:border-purple-300/50 transition duration-300 shadow-md hover:shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-xl text-purple-600 font-bold">
+          Statistik Investasi
+        </CardTitle>
+      </CardHeader>
       <CardContent>
-        {/* Saldo */}
-        <div className="mb-4">
-          <p className="text-m text-gray-500">Total Saldo</p>
-          <h1 className="text-xl font-extrabold text-purple-400">
+        {/* Total Saldo */}
+        <div className="mb-6">
+          <p className="text-sm text-muted-foreground">Total Saldo</p>
+          <h2 className="text-2xl font-extrabold text-purple-500">
             Rp {totalSaldo.toLocaleString("id-ID")}
-          </h1>
+          </h2>
         </div>
 
-        <h2 className="text-xl font-bold mb-4">Statistik Investasi</h2>
-
         {/* Chart */}
-        <div className="h-56 mb-6">
+        <div className="h-56 mb-8">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
-              <Line
-                type="monotone"
-                dataKey="nilai"
-                stroke="#5a199b"
-                strokeWidth={2}
-              />
-              <CartesianGrid stroke="#ecc9ff" strokeDasharray="5 5" />
+              <CartesianGrid stroke="#f3e8ff" strokeDasharray="4 4" />
               <XAxis
                 dataKey="bulan"
                 tickFormatter={(bulan) => monthNames[bulan]}
@@ -66,29 +71,35 @@ const InvestasiCard = () => {
                   "Nilai",
                 ]}
               />
+              <Line
+                type="monotone"
+                dataKey="nilai"
+                stroke="#9333ea"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* Table */}
-        <table className="w-full text-left border-separate border-spacing-0 border border-purple-200 rounded-2xl overflow-hidden">
-          <thead className="bg-purple-100 text-center">
-            <tr>
-              <th className="py-2 px-4 border-b">Bulan</th>
-              <th className="py-2 px-4 border-b">Jumlah</th>
-            </tr>
-          </thead>
-          <tbody>
-            {chartData.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b">{monthNames[item.bulan]}</td>
-                <td className="py-2 px-4 border-b">
-                  Rp {item.nilai.toLocaleString("id-ID")}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto rounded-lg border border-purple-100">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-purple-100 text-purple-700">
+                <TableHead className="text-center">Bulan</TableHead>
+                <TableHead className="text-center">Jumlah</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {chartData.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>{monthNames[item.bulan]}</TableCell>
+                  <TableCell>Rp {item.nilai.toLocaleString("id-ID")}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </CardContent>
     </Card>
   );
