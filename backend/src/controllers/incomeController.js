@@ -23,3 +23,9 @@ export const deleteIncome = async (request, h) => {
   await incomeService.deleteIncome(uid, request.params.id);
   return h.response({ message: 'Income deleted' }).code(200);
 };
+
+export const getIncomeById = async (request, h) => {
+  const uid = request.auth.uid;
+  const income = await incomeService.getIncomeById(uid, request.params.id);
+  return h.response(income).code(200);
+};

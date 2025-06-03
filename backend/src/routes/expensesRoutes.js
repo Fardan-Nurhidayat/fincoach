@@ -1,51 +1,51 @@
-import * as incomeCOntroller from '../controllers/incomeController.js';
+import * as expensesController from '../controllers/expensesController.js';
 import { verifyToken } from '../middleware/auth.js';
 
 const routes = [
   {
     method: 'GET',
-    path: '/income',
+    path: '/expenses',
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: incomeCOntroller.getAllIncomes,
+    handler: expensesController.getAllExpenses,
   },
   {
     method: 'POST',
-    path: '/income',
+    path: '/expenses',
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: incomeCOntroller.createIncome,
+    handler: expensesController.createExpense,
   },
   {
     method: 'PUT',
-    path: '/income/{id}',
+    path: '/expenses/{id}',
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: incomeCOntroller.updateIncome,
+    handler: expensesController.updateExpense,
   },
   {
     method: 'DELETE',
-    path: '/income/{id}',
+    path: '/expenses/{id}',
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: incomeCOntroller.deleteIncome,
+    handler: expensesController.deleteExpense,
   },
   {
     method: 'GET',
-    path: '/income/{id}',
+    path: '/expenses/{id}',
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: incomeCOntroller.getIncomeById,
+    handler: expensesController.getExpenseById,
   },
 ];
 
 export default {
-  name: 'incomeRoutes',
+  name: 'expensesRoutes',
   register: async function (server) {
     server.route(routes);
   },

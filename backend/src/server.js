@@ -2,6 +2,7 @@ import Hapi from '@hapi/hapi';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import incomeRoutes from './routes/incomeRoutes.js';
+import expensesRoutes from './routes/expensesRoutes.js';
 
 const init = async () => {
   const server = Hapi.server({ 
@@ -30,7 +31,12 @@ const init = async () => {
       plugin: incomeRoutes,
       options: {},
       routes: { prefix: '/api' }
-    }
+    },
+    {
+      plugin: expensesRoutes,
+      options: {},
+      routes: { prefix: '/api' }
+    },
   ]);
 
   await server.start();

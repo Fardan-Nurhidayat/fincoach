@@ -32,3 +32,14 @@ export const deleteIncome = async (uid, id) => {
 
   await incomeRef.delete();
 };
+
+export const getIncomeById = async (uid, id) => {
+  const incomeRef = db.collection('incomes').doc(id);
+  const incomeDoc = await incomeRef.get();
+
+  if (!incomeDoc.exists || incomeDoc.data().uid !== uid) {
+    throw new Error('Income not found or does not belong to user');
+  }
+
+  return { id: incomeDoc.id, ...incomeDoc.data() };
+};
