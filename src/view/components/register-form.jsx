@@ -9,7 +9,25 @@ import {
 } from "@/view/components/ui/card";
 import { Input } from "@/view/components/ui/input";
 import { Label } from "@/view/components/ui/label";
+import { registerUser } from "@/utils/api";
+import { Link } from "react-router";
 
+const registerHandler = async e => {
+  e.preventDefault();
+
+  try {
+    const responseJson = await registerUser({
+      displayName: e.target.name.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+    });
+
+    console.log(responseJson);
+  } catch (error) {
+    console.error("Registration failed:", error);
+    alert("Gagal mendaftar. Silakan coba lagi.");
+  }
+};
 export function RegisterForm({ className, ...props }) {
   return (
     <div className='bg-purple-950'>
@@ -22,12 +40,15 @@ export function RegisterForm({ className, ...props }) {
                 <CardDescription>Masukan data dibawah ini</CardDescription>
               </CardHeader>
               <CardContent>
-                <form>
+                <form
+                  onSubmit={registerHandler}
+                  className='flex flex-col gap-6'>
                   <div className='flex flex-col gap-6'>
                     <div className='grid gap-3'>
                       <Label htmlFor='name'>Nama</Label>
                       <Input
                         id='name'
+                        name='name'
                         aria-label='Name'
                         type='text'
                         placeholder='John Doe'
@@ -36,6 +57,7 @@ export function RegisterForm({ className, ...props }) {
                       <Label htmlFor='email'>Email</Label>
                       <Input
                         id='email'
+                        name='email'
                         aria-label='Email'
                         type='email'
                         placeholder='m@example.com'
@@ -48,6 +70,7 @@ export function RegisterForm({ className, ...props }) {
                       </div>
                       <Input
                         id='password'
+                        name='password'
                         aria-label='Password'
                         type='password'
                         required
@@ -61,13 +84,14 @@ export function RegisterForm({ className, ...props }) {
                       </Button>
                     </div>
                   </div>
-                  <div className='mt-4 text-center text-sm text-purple-950'>
+                  <div className='text-center text-sm text-purple-950'>
                     Sudah punya akun?{" "}
-                    <a
-                      href='/login'
+                    <Link
+                      to='/login'
+                      aria-label='Masuk'
                       className='underline underline-offset-4'>
                       Masuk
-                    </a>
+                    </Link>
                   </div>
                 </form>
               </CardContent>
