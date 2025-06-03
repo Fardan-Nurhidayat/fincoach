@@ -47,6 +47,15 @@ const DashboardSidebar = () => {
           <span className="mr-2">📊</span> Dashboard
         </Button>
 
+        <Button
+          variant="ghost"
+          className="justify-start text-white hover:bg-white"
+        >
+          <Link to="/tabungan"> 
+            <span className="mr-2">💰</span> Tabungan
+          </Link>
+        </Button>
+
         {/* Yields with Dropdown */}
         <div>
           <Button
@@ -55,7 +64,9 @@ const DashboardSidebar = () => {
             onClick={() => setIsInvestasiOpen(!investasiOpen)}
           >
             <span className="flex items-center">
-              <span className="mr-5">💰</span> Investasi
+              <Link>
+                <span className="mr-5">💸</span> Investasi
+              </Link>
             </span>
             <ChevronDownIcon
               className={`w-4 h-4 transition-transform ${

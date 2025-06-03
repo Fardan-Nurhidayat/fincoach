@@ -6,6 +6,7 @@ import { RegisterForm } from "./view/components/register-form";
 import Dashboard from "./view/pages/Dashboard";
 import Investasi from "./view/pages/investasi";
 import SahamPerusahaan from "./view/pages/SahamPerusahaan";
+import Tabungan from "./view/pages/Tabungan";
 
 const App = () => (
   <BrowserRouter>
@@ -33,6 +34,10 @@ const App = () => (
       <Route
         path='/saham-perusahaan'
         element={<SahamPerusahaan/>}
+      />
+      <Route
+        path='/tabungan'
+        element={<Tabungan/>}
       />
     </Routes>
   </BrowserRouter>
