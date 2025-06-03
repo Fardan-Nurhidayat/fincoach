@@ -3,6 +3,7 @@ import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import incomeRoutes from './routes/incomeRoutes.js';
 import expensesRoutes from './routes/expensesRoutes.js';
+import savingsRoutes from './routes/savingsRoutes.js';
 
 const init = async () => {
   const server = Hapi.server({ 
@@ -34,6 +35,11 @@ const init = async () => {
     },
     {
       plugin: expensesRoutes,
+      options: {},
+      routes: { prefix: '/api' }
+    },
+    {
+      plugin: savingsRoutes,
       options: {},
       routes: { prefix: '/api' }
     },
