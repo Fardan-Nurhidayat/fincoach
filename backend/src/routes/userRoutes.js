@@ -5,9 +5,9 @@ const routes = [
   {
     method: "GET",
     path: "/users",
-    // options: {
-    //   pre: [{ method: verifyToken }],
-    // },
+    options: {
+      pre: [{ method: verifyToken }],
+    },
     handler: UserController.getUsers,
   },
   {
