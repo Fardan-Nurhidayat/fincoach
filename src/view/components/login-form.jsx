@@ -12,9 +12,12 @@ import { Label } from "@/view/components/ui/label";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
+import { api } from "@/utils/api";
 
 export function LoginForm({ className, ...props }) {
+  const navigate = useNavigate();
   const [ formData, setFormData ] = useState({
     email: '',
     password: ''
@@ -28,22 +31,24 @@ export function LoginForm({ className, ...props }) {
 
       // Dapatkan ID token
       const token = await user.getIdToken();
-      console.log('Token:', token);
 
-      // Kirim token ke backend
-      const res = await fetch('http://localhost:3000/api/users/profile', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await api.get('/users/profile');
+      localStorage.setItem('fincoach_token', token);
 
-      const data = await res.json();
-      console.log('Data dari backend:', data);
-      alert('Login berhasil!');
+      if (res) {
+        navigate('/dashboard');
+      } else {
+        toast.error('Login gagal, silakan coba lagi.');
+      }
     } catch (error) {
       console.error('Login gagal:', error);
-      alert('Login gagal!');
+      if (error.code === 'auth/user-not-found') {
+        toast.error('Pengguna tidak ditemukan. Silakan daftar terlebih dahulu.');
+      } else if (error.code === 'auth/wrong-password') {
+        toast.error('Kata sandi salah. Silakan coba lagi.');
+      } else {
+        toast.error('Login gagal, silakan coba lagi.');
+      }
     }
   };
 
