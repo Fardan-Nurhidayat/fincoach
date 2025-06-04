@@ -1,15 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { Separator } from "../components/ui/separator";
 import { ChevronDownIcon } from "@radix-ui/react-icons"; // Example icon, you might need to install @radix-ui/react-icons
 import { Link } from "react-router";
 
+import { api } from "@/utils/api";
+
 const DashboardSidebar = () => {
   // Placeholder for dropdown state
+  const [profile, setProfile] = useState({});
   const [isYieldsOpen, setIsYieldsOpen] = useState(false);
   const [investasiOpen, setIsInvestasiOpen] = useState(false);
   const [isDexesOpen, setIsDexesOpen] = useState(false);
+  const getProfile = async () => {
+    try {
+      const response = await api.get("/users/profile");
+      setProfile(response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      return null;
+    }
+  };
 
+  useEffect(() => {
+    getProfile();
+  }, []);
   return (
     <aside className='w-64 bg-gradient-to-r from-purple-800 to-purple-600 text-white flex flex-col p-4'>
       {/* Logo Section */}
@@ -32,7 +48,7 @@ const DashboardSidebar = () => {
           />
         </div>
         <div>
-          <p className='font-semibold'>John Doe</p>
+          <p className='font-semibold'>{profile.displayName}</p>
         </div>
       </div>
 
