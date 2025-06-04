@@ -9,8 +9,8 @@ import {
 } from "@/view/components/ui/card";
 import { Input } from "@/view/components/ui/input";
 import { Label } from "@/view/components/ui/label";
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -18,36 +18,39 @@ import { api } from "@/utils/api";
 
 export function LoginForm({ className, ...props }) {
   const navigate = useNavigate();
-  const [ formData, setFormData ] = useState({
-    email: '',
-    password: ''
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
   });
 
-  const handleLogin = async (e) => {
+  const handleLogin = async e => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
       const user = userCredential.user;
-
       // Dapatkan ID token
       const token = await user.getIdToken();
-
-      const res = await api.get('/users/profile');
-      localStorage.setItem('fincoach_token', token);
-
+      localStorage.setItem("fincoach_token", token);
+      const res = await api.get("/users/profile", token);
       if (res) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
-        toast.error('Login gagal, silakan coba lagi.');
+        toast.error("Login gagal, silakan coba lagi.");
       }
     } catch (error) {
-      console.error('Login gagal:', error);
-      if (error.code === 'auth/user-not-found') {
-        toast.error('Pengguna tidak ditemukan. Silakan daftar terlebih dahulu.');
-      } else if (error.code === 'auth/wrong-password') {
-        toast.error('Kata sandi salah. Silakan coba lagi.');
+      console.error("Login gagal:", error);
+      if (error.code === "auth/user-not-found") {
+        toast.error(
+          "Pengguna tidak ditemukan. Silakan daftar terlebih dahulu."
+        );
+      } else if (error.code === "auth/wrong-password") {
+        toast.error("Kata sandi salah. Silakan coba lagi.");
       } else {
-        toast.error('Login gagal, silakan coba lagi.');
+        toast.error("Login gagal, silakan coba lagi.");
       }
     }
   };
@@ -73,7 +76,9 @@ export function LoginForm({ className, ...props }) {
                         type='email'
                         placeholder='m@example.com'
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onChange={e =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
                         required
                       />
                     </div>
@@ -92,7 +97,9 @@ export function LoginForm({ className, ...props }) {
                         type='password'
                         placeholder='********'
                         value={formData.password}
-                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        onChange={e =>
+                          setFormData({ ...formData, password: e.target.value })
+                        }
                         required
                       />
                     </div>

@@ -14,11 +14,12 @@ export const api = {
     };
   },
 
-  async get(path) {
+  async get(path , token) {
     try {
       const response = await fetch(BASE_URL + path, {
         method: "GET",
         headers: this.getHeaders(),
+        pre : [{ method: token }],
       });
 
       if (!response.ok) {
