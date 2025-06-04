@@ -5,6 +5,11 @@ export const api = {
 
   setToken(token) {
     this.token = token;
+    if (token) {
+      localStorage.setItem("fincoach_token", token);
+    } else {
+      localStorage.removeItem("fincoach_token");
+    }
   },
 
   getHeaders() {
@@ -14,21 +19,18 @@ export const api = {
     };
   },
 
-  async get(path , token) {
+  async get(path) {
     try {
       const response = await fetch(BASE_URL + path, {
         method: "GET",
         headers: this.getHeaders(),
-        pre : [{ method: token }],
       });
-
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
 
       return await response.json();
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
     }
@@ -47,8 +49,7 @@ export const api = {
       }
 
       return await response.json();
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error posting data:", error);
       throw error;
     }
@@ -67,8 +68,7 @@ export const api = {
       }
 
       return await response.json();
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error updating data:", error);
       throw error;
     }
@@ -86,10 +86,9 @@ export const api = {
       }
 
       return await response.json();
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error deleting data:", error);
       throw error;
     }
-  }
-}
+  },
+};
