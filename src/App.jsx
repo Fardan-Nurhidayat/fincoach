@@ -4,7 +4,7 @@ import Welcome from "./view/pages/Welcome";
 import { LoginForm } from "./view/components/login-form";
 import { RegisterForm } from "./view/components/register-form";
 import Dashboard from "./view/pages/Dashboard";
-import Investasi from "./view/pages/investasi";
+import Investasi from "./view/pages/Investasi";
 import SahamPerusahaan from "./view/pages/SahamPerusahaan";
 import Tabungan from "./view/pages/Tabungan";
 
@@ -29,15 +29,15 @@ const App = () => (
       />
       <Route
         path='/investasi'
-        element={<Investasi/>}
+        element={<Investasi />}
       />
       <Route
         path='/saham-perusahaan'
-        element={<SahamPerusahaan/>}
+        element={<SahamPerusahaan />}
       />
       <Route
         path='/tabungan'
-        element={<Tabungan/>}
+        element={<Tabungan />}
       />
     </Routes>
   </BrowserRouter>
