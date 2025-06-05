@@ -82,15 +82,12 @@ export default function CardSection() {
           jumlah: totalIncome,
         });
 
-        // Ambil semua data dan hitung sisa/pemakaian
         const [totalExpenses, totalSavings, totalInvestments] =
           await Promise.all([
             getExpenses(totalIncome),
             getSavings(totalIncome),
             getInvestments(totalIncome),
           ]);
-
-        // Update sisa dan pemakaian setelah semua data didapat
         updateSisaAndPemakaian(
           totalIncome,
           totalExpenses,
