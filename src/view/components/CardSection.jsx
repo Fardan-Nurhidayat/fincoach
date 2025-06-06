@@ -1,12 +1,6 @@
-import { api } from "@/utils/api.js";
 import { ToastContainer, toast } from "react-toastify";
 
-import {
-  profilResiko,
-  pengeluaran,
-  tabungan,
-  investasi,
-} from "../../utils/CardDashboard.js";
+import { profilResiko } from "../../utils/CardDashboard.js";
 
 import {
   Dialog,
@@ -31,277 +25,29 @@ import {
 } from "./ui/card";
 
 import { IconPlus } from "@tabler/icons-react";
-import { useState, useEffect } from "react";
-
+import { useFinancialData } from "../../hooks/useFinancialData.js";
 export default function CardSection() {
-  const [income, setIncome] = useState({ jumlah: 0, sumber: "" });
-  const [expensesState, setExpensesState] = useState({
-    jumlah: 0,
-    limit: (profilResiko.pengeluaran / 100) * income.jumlah,
-  });
-  const [savingsState, setSavingsState] = useState({
-    jumlah: 0,
-    limit: (profilResiko.tabungan / 100) * income.jumlah,
-  });
-  const [investmentsState, setInvestmentsState] = useState({
-    jumlah: 0,
-    limit: (profilResiko.investasi / 100) * income.jumlah,
-  });
-  const [sisa, setSisa] = useState(0);
-  const [pemakaian, setPemakaian] = useState(0);
-
-  // Toast configuration - dibuat konsisten
-  const toastConfig = {
-    position: "top-right",
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  };
-  const updateSisaAndPemakaian = (
-    totalIncome,
-    expenses,
-    savings,
-    investments
-  ) => {
-    const totalUsed = expenses + savings + investments;
-    setPemakaian(totalUsed);
-    setSisa(totalIncome - totalUsed);
-  };
-
-  const getIncome = async () => {
-    try {
-      const res = await api.get("/income");
-      if (res) {
-        const totalIncome = res.reduce((acc, item) => {
-          return acc + Number(item.income);
-        }, 0);
-        setIncome({
-          jumlah: totalIncome,
-        });
-
-        const [totalExpenses, totalSavings, totalInvestments] =
-          await Promise.all([
-            getExpenses(totalIncome),
-            getSavings(totalIncome),
-            getInvestments(totalIncome),
-          ]);
-        updateSisaAndPemakaian(
-          totalIncome,
-          totalExpenses,
-          totalSavings,
-          totalInvestments
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching income:", error);
-      toast.error("Gagal memuat data pemasukan.", toastConfig);
-    }
-  };
-
-  const getExpenses = async totalIncome => {
-    try {
-      const res = await api.get("/expenses");
-      if (res) {
-        const totalExpenses = res.reduce((acc, item) => {
-          return acc + Number(item.expenses);
-        }, 0);
-        setExpensesState(prev => {
-          const newState = {
-            jumlah: totalExpenses,
-            limit: (profilResiko.pengeluaran * totalIncome) / 100,
-          };
-          return newState;
-        });
-        return totalExpenses; // Return untuk perhitungan sisa
-      }
-      return 0;
-    } catch (error) {
-      console.error("Error fetching expenses:", error);
-      toast.error("Gagal memuat data pengeluaran.", toastConfig);
-      return 0;
-    }
-  };
-
-  const getSavings = async totalIncome => {
-    try {
-      const res = await api.get("/savings");
-      if (res) {
-        const totalSavings = res.reduce(
-          (acc, item) => acc + Number(item.savings),
-          0
-        );
-
-        setSavingsState(prev => {
-          const newState = {
-            jumlah: totalSavings,
-            limit: (profilResiko.tabungan * totalIncome) / 100,
-          };
-          return newState;
-        });
-        return totalSavings; // Return untuk perhitungan sisa
-      }
-      return 0;
-    } catch (error) {
-      console.error("Error fetching savings:", error);
-      toast.error("Gagal memuat data tabungan.", toastConfig);
-      return 0;
-    }
-  };
-
-  const getInvestments = async totalIncome => {
-    try {
-      const res = await api.get("/investments");
-      if (res) {
-        const totalInvestments = res.reduce(
-          (acc, item) => acc + Number(item.investments),
-          0
-        );
-
-        setInvestmentsState(prev => {
-          const newState = {
-            jumlah: totalInvestments,
-            limit: (profilResiko.investasi * totalIncome) / 100,
-          };
-          return newState;
-        });
-        return totalInvestments; // Return untuk perhitungan sisa
-      }
-      return 0;
-    } catch (error) {
-      console.error("Error fetching investments:", error);
-      toast.error("Gagal memuat data investasi.", toastConfig);
-      return 0;
-    }
-  };
-
-  useEffect(() => {
-    getIncome();
-  }, []);
-
-  const postIncome = async e => {
+  const {
+    income,
+    expensesState,
+    savingsState,
+    investmentsState,
+    sisa,
+    pemakaian,
+    postIncome,
+    postExpense,
+    postSavings,
+    postInvestment,
+    toastConfig,
+  } = useFinancialData();
+  const incomeHandler = async e => {
     e.preventDefault();
-    const income = e.target.pemasukan.value;
-    const sumber = e.target.sumber.value;
-    try {
-      const res = await api.post("/income", {
-        income: income,
-        source: sumber,
-        date: new Date().toISOString(),
-      });
-      if (res) {
-        toast.success("Pemasukan berhasil ditambahkan!", toastConfig);
-        getIncome(); // Refresh data after posting
-      }
-    } catch (error) {
-      console.error("Error posting income:", error);
-      toast.error("Gagal menambahkan pemasukan.", toastConfig);
-    }
+    const amount = parseInt(e.target.pemasukan.value, 10);
+    const desc = e.target.sumber.value;
+    await postIncome(amount, desc);
+    e.target.pemasukan.value = "";
+    e.target.sumber.value = "";
   };
-
-  const postExpense = async (amount, category) => {
-    try {
-      const res = await api.post("/expenses", {
-        expenses: amount,
-        category: category,
-        date: new Date().toISOString(),
-      });
-      if (res) {
-        setExpensesState(prev => ({
-          jumlah: prev.jumlah + amount,
-          limit: prev.limit,
-        }));
-        // Update sisa dan pemakaian berdasarkan state terbaru
-        const newTotalUsed =
-          expensesState.jumlah +
-          amount +
-          savingsState.jumlah +
-          investmentsState.jumlah;
-        setPemakaian(newTotalUsed);
-        setSisa(income.jumlah - newTotalUsed);
-
-        toast.success(
-          `Pengeluaran Rp. ${amount.toLocaleString(
-            "id-ID"
-          )} untuk ${category} berhasil ditambahkan!`,
-          toastConfig
-        );
-      }
-    } catch (error) {
-      console.error("Error posting expense:", error);
-      toast.error("Gagal menambahkan pengeluaran.", toastConfig);
-    }
-  };
-
-  const postSavings = async (amount, goal) => {
-    try {
-      const res = await api.post("/savings", {
-        savings: amount,
-        goal: goal,
-        date: new Date().toISOString(),
-      });
-
-      if (res) {
-        setSavingsState(prev => ({
-          jumlah: prev.jumlah + amount,
-          limit: prev.limit,
-        }));
-        // Update sisa dan pemakaian berdasarkan state terbaru
-        const newTotalUsed =
-          expensesState.jumlah +
-          (savingsState.jumlah + amount) +
-          investmentsState.jumlah;
-        setPemakaian(newTotalUsed);
-        setSisa(income.jumlah - newTotalUsed);
-
-        toast.success(
-          `Tabungan Rp. ${amount.toLocaleString(
-            "id-ID"
-          )} untuk ${goal} berhasil ditambahkan!`,
-          toastConfig
-        );
-      }
-    } catch (error) {
-      console.error("Error posting savings:", error);
-      toast.error("Gagal menambahkan tabungan.", toastConfig);
-    }
-  };
-
-  const postInvestment = async (amount, instrument) => {
-    try {
-      const res = await api.post("/investments", {
-        investments: amount,
-        instrument: instrument,
-        date: new Date().toISOString(),
-      });
-      if (res) {
-        setInvestmentsState(prev => ({
-          jumlah: prev.jumlah + amount,
-          limit: prev.limit,
-        }));
-        // Update sisa dan pemakaian berdasarkan state terbaru
-        const newTotalUsed =
-          expensesState.jumlah +
-          savingsState.jumlah +
-          (investmentsState.jumlah + amount);
-        setPemakaian(newTotalUsed);
-        setSisa(income.jumlah - newTotalUsed);
-
-        toast.success(
-          `Investasi Rp. ${amount.toLocaleString(
-            "id-ID"
-          )} pada ${instrument} berhasil ditambahkan!`,
-          toastConfig
-        );
-      }
-    } catch (error) {
-      console.error("Error posting investment:", error);
-      toast.error("Gagal menambahkan investasi.", toastConfig);
-    }
-  };
-
   const actionHandler = async e => {
     e.preventDefault();
     const status = e.target.status.value;
@@ -418,7 +164,7 @@ export default function CardSection() {
                     Masukkan jumlah pemasukan baru Anda.
                   </DialogDescription>
                 </DialogHeader>
-                <form onSubmit={postIncome}>
+                <form onSubmit={incomeHandler}>
                   <div className='grid gap-4 py-4'>
                     <div className='grid grid-cols-4 items-center gap-4'>
                       <Label
