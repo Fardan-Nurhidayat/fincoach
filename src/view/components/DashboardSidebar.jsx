@@ -56,32 +56,35 @@ const DashboardSidebar = () => {
 
       {/* Navigation Links */}
       <nav className='flex flex-col space-y-2 flex-1'>
-        <Button
-          variant='ghost'
-          className='justify-start text-white hover:bg-white cursor-pointer'>
-          <Link to='/dashboard'>
-            <span className='mr-2'>📊</span> Dashboard
-          </Link>
-        </Button>
+        {/* Dashboard - menggunakan Link langsung */}
+        <Link
+          to='/dashboard'
+          className='flex items-center justify-start text-white hover:bg-white hover:text-purple-700 px-3 py-2 font-semibold rounded-lg cursor-pointer transition-colors'>
+          <span className='mr-2'>📊</span> Dashboard
+        </Link>
 
-        <Button
-          variant='ghost'
-          className='justify-start text-white hover:bg-white'>
-          <Link to='/tabungan'>
-            <span className='mr-2'>💰</span> Tabungan
-          </Link>
-        </Button>
+        {/* Pengeluaran - menggunakan Link langsung */}
+        <Link
+          to='/pengeluaran'
+          className='flex items-center justify-start text-white hover:bg-white hover:text-purple-700 px-3 py-2 font-semibold rounded-lg cursor-pointer transition-colors'>
+          <span className='mr-2'>💸</span> Pengeluaran
+        </Link>
 
-        {/* Yields with Dropdown */}
+        {/* Tabungan - menggunakan Link langsung */}
+        <Link
+          to='/tabungan'
+          className='flex items-center justify-start text-white hover:bg-white hover:text-purple-700 px-3 py-2 font-semibold rounded-lg cursor-pointer transition-colors'>
+          <span className='mr-2'>💰</span> Tabungan
+        </Link>
+
+        {/* Investasi dengan Dropdown */}
         <div>
           <Button
             variant='ghost'
             className='text-white hover:bg-white w-full flex items-center justify-between'
             onClick={() => setIsInvestasiOpen(!investasiOpen)}>
             <span className='flex items-center'>
-              <Link>
-                <span className='mr-5'>💸</span> Investasi
-              </Link>
+              <span className='mr-5'>💸</span> Investasi
             </span>
             <ChevronDownIcon
               className={`w-4 h-4 transition-transform ${
@@ -91,22 +94,22 @@ const DashboardSidebar = () => {
           </Button>
           {investasiOpen && (
             <div className='ml-6 flex flex-col space-y-1 mt-1'>
-              {/* Placeholder Dropdown Items */}
-              <Button
-                variant='ghost'
-                className='justify-start text-gray-300 hover:bg-white text-sm'>
-                <Link to='/investasi'>Investasi</Link>
-              </Button>
-              <Button
-                variant='ghost'
-                className='justify-start text-gray-300 hover:bg-white text-sm'>
-                <Link to='/saham-perusahaan'>Saham Perusahaan</Link>
-              </Button>
+              {/* Item Dropdown Investasi */}
+              <Link
+                to='/investasi'
+                className='flex items-center justify-start text-gray-300 hover:bg-white text-sm px-3 py-1 rounded-lg cursor-pointer transition-colors'>
+                Investasi
+              </Link>
+              <Link
+                to='/saham-perusahaan'
+                className='flex items-center justify-start text-gray-300 hover:bg-white text-sm px-3 py-1 rounded-lg cursor-pointer transition-colors'>
+                Saham Perusahaan
+              </Link>
             </div>
           )}
         </div>
 
-        {/* Yields with Dropdown */}
+        {/* Yields dengan Dropdown */}
         <div>
           <Button
             variant='ghost'
@@ -123,22 +126,22 @@ const DashboardSidebar = () => {
           </Button>
           {isYieldsOpen && (
             <div className='ml-6 flex flex-col space-y-1 mt-1'>
-              {/* Placeholder Dropdown Items */}
-              <Button
-                variant='ghost'
-                className='justify-start text-gray-300 hover:bg-white text-sm'>
+              {/* Item Dropdown Yields */}
+              <Link
+                to='/yield-farm-1'
+                className='flex items-center justify-start text-gray-300 hover:bg-white text-sm px-3 py-1 rounded-lg cursor-pointer transition-colors'>
                 Yield Farm 1
-              </Button>
-              <Button
-                variant='ghost'
-                className='justify-start text-gray-300 hover:bg-white text-sm'>
+              </Link>
+              <Link
+                to='/yield-farm-2'
+                className='flex items-center justify-start text-gray-300 hover:bg-white text-sm px-3 py-1 rounded-lg cursor-pointer transition-colors'>
                 Yield Farm 2
-              </Button>
+              </Link>
             </div>
           )}
         </div>
 
-        {/* DEXes with Dropdown */}
+        {/* DEXes dengan Dropdown */}
         <div>
           <Button
             variant='ghost'
@@ -155,31 +158,34 @@ const DashboardSidebar = () => {
           </Button>
           {isDexesOpen && (
             <div className='ml-6 flex flex-col space-y-1 mt-1'>
-              {/* Placeholder Dropdown Items */}
-              <Button
-                variant='ghost'
-                className='justify-start text-gray-300 hover:bg-white text-sm'>
+              {/* Item Dropdown DEXes */}
+              <Link
+                to='/dex-1'
+                className='flex items-center justify-start text-gray-300 hover:bg-white text-sm px-3 py-1 rounded-lg cursor-pointer transition-colors'>
                 DEX 1
-              </Button>
-              <Button
-                variant='ghost'
-                className='justify-start text-gray-300 hover:bg-white text-sm'>
+              </Link>
+              <Link
+                to='/dex-2'
+                className='flex items-center justify-start text-gray-300 hover:bg-white text-sm px-3 py-1 rounded-lg cursor-pointer transition-colors'>
                 DEX 2
-              </Button>
+              </Link>
             </div>
           )}
         </div>
 
-        <Button
-          variant='ghost'
-          className='justify-start text-white hover:bg-white'>
+        {/* Protocols - menggunakan Link langsung */}
+        <Link
+          to='/protocols'
+          className='flex items-center justify-start text-white hover:bg-white px-3 py-2 rounded-lg cursor-pointer transition-colors'>
           <span className='mr-2'>📜</span> Protocols
-        </Button>
-        <Button
-          variant='ghost'
-          className='justify-start text-white hover:bg-white'>
+        </Link>
+
+        {/* Settings - menggunakan Link langsung */}
+        <Link
+          to='/settings'
+          className='flex items-center justify-start text-white hover:bg-white px-3 py-2 rounded-lg cursor-pointer transition-colors'>
           <span className='mr-2'>⚙️</span> Settings
-        </Button>
+        </Link>
       </nav>
 
       <Separator className='bg-white my-4' />

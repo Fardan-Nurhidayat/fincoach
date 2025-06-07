@@ -104,6 +104,7 @@ export const useFinancialData = () => {
     }
   };
 
+  // Untuk mendapatkan jumlah dan limit pengeluaran
   const getExpenses = async totalIncome => {
     try {
       const res = await api.get("/expenses");
@@ -125,6 +126,7 @@ export const useFinancialData = () => {
     }
   };
 
+  // Untuk mendapatkan total dan limit tabungan
   const getSavings = async totalIncome => {
     try {
       const res = await api.get("/savings");
@@ -147,6 +149,7 @@ export const useFinancialData = () => {
     }
   };
 
+  // Untuk mendapatkan total dan limit investasi
   const getInvestments = async totalIncome => {
     try {
       const res = await api.get("/investments");
@@ -166,6 +169,55 @@ export const useFinancialData = () => {
       console.error("Error fetching investments:", error);
       toast.error("Gagal memuat data investasi.", toastConfig);
       return 0;
+    }
+  };
+  /* Untuk mendapatkan data dari api secara dinamis 
+    Path : path untuk API
+    Name : untuk nama endpoint
+  */
+  const getData = async ({ path, name }) => {
+    try {
+      const res = await api.get(path);
+      const sortedByDate = [...res].sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
+      });
+      return sortedByDate; // Kembalikan data mentah
+    } catch (error) {
+      toast.error(`Gagal memuat data ${name}`);
+      return [];
+    }
+  };
+
+  const getDetailData = async ({ path, id, name }) => {
+    try {
+      const res = await api.get(`${path}/${id}`);
+      return res;
+    } catch (error) {
+      toast.error(`Gagal memuat data ${name}`);
+      return [];
+    }
+  };
+
+  const updateData = async ({ path, id, body, name, tipe }) => {
+    try {
+      const res = await api.put(`${path}/${id}`, body);
+      toast.success(
+        `Berhasil menambahkan ${name} dengan nilai Rp. ${body[
+          tipe
+        ].toLocaleString("id-ID")}`
+      );
+      return res;
+    } catch (error) {
+      toast.error(`Gagal menambahkan data ${name}`, toastConfig);
+    }
+  };
+
+  const deleteData = async ({ path, id, name }) => {
+    try {
+      const res = await api.delete(`${path}/${id}`);
+      toast.success(`Berhasil menghapus data`);
+    } catch (error) {
+      toast.error(`Gagal menghapus data ${name}. Mohon Coba lagi`);
     }
   };
 
@@ -323,5 +375,9 @@ export const useFinancialData = () => {
     // Config
     toastConfig,
     getAllFinancialData,
+    getData,
+    getDetailData,
+    updateData,
+    deleteData,
   };
 };
