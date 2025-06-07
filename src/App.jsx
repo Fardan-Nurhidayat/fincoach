@@ -1,5 +1,6 @@
 import "./styles/style.css";
 import { BrowserRouter, Route, Routes } from "react-router";
+import ProtectedRoute from "./view/components/ProtectedRoute";
 import Welcome from "./view/pages/Welcome";
 import { LoginForm } from "./view/components/login-form";
 import { RegisterForm } from "./view/components/register-form";
@@ -11,6 +12,7 @@ import Tabungan from "./view/pages/Tabungan";
 const App = () => (
   <BrowserRouter>
     <Routes>
+      {/* Rute Publik */}
       <Route
         path='/'
         element={<Welcome />}
@@ -23,21 +25,39 @@ const App = () => (
         path='/register'
         element={<RegisterForm />}
       />
+
+      {/* Rute Terproteksi */}
       <Route
         path='/dashboard'
-        element={<Dashboard />}
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
       />
       <Route
         path='/investasi'
-        element={<Investasi />}
+        element={
+          <ProtectedRoute>
+            <Investasi />
+          </ProtectedRoute>
+        }
       />
       <Route
         path='/saham-perusahaan'
-        element={<SahamPerusahaan />}
+        element={
+          <ProtectedRoute>
+            <SahamPerusahaan />
+          </ProtectedRoute>
+        }
       />
       <Route
         path='/tabungan'
-        element={<Tabungan />}
+        element={
+          <ProtectedRoute>
+            <Tabungan />
+          </ProtectedRoute>
+        }
       />
     </Routes>
   </BrowserRouter>
