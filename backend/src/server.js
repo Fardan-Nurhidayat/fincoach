@@ -5,6 +5,7 @@ import incomeRoutes from './routes/incomeRoutes.js';
 import expensesRoutes from './routes/expensesRoutes.js';
 import savingsRoutes from './routes/savingsRoutes.js';
 import investmentsRoutes from './routes/investmentsRoutes.js';
+import riskProfileRoutes from './routes/riskProfileRoutes.js';
 
 const init = async () => {
   const server = Hapi.server({ 
@@ -48,7 +49,12 @@ const init = async () => {
       plugin: investmentsRoutes,
       options: {},
       routes: { prefix: '/api' }
-    }
+    },
+    {
+      plugin: riskProfileRoutes,
+      options: {},
+      routes: { prefix: '/api' }
+    },
   ]);
 
   await server.start();
