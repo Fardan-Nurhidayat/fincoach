@@ -5,6 +5,7 @@ import Welcome from "./view/pages/Welcome";
 import { LoginForm } from "./view/components/login-form";
 import { RegisterForm } from "./view/components/register-form";
 import Dashboard from "./view/pages/Dashboard";
+import Pengeluaran from "@/view/pages/Pengeluaran";
 import Investasi from "./view/pages/Investasi";
 import SahamPerusahaan from "./view/pages/SahamPerusahaan";
 import Tabungan from "./view/pages/Tabungan";
@@ -36,6 +37,13 @@ const App = () => (
         }
       />
       <Route
+        path='/pengeluaran'
+        element={
+          <ProtectedRoute>
+            <Pengeluaran />
+          </ProtectedRoute>
+        }></Route>
+      <Route
         path='/investasi'
         element={
           <ProtectedRoute>
@@ -43,6 +51,7 @@ const App = () => (
           </ProtectedRoute>
         }
       />
+
       <Route
         path='/saham-perusahaan'
         element={
