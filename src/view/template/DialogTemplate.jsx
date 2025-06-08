@@ -16,6 +16,7 @@ import { Button } from "@/view/components/ui/button";
 export default function DialogTemplate({
   trigger,
   title,
+  tipe,
   description,
   fields,
   initialData = {},
@@ -97,10 +98,17 @@ export default function DialogTemplate({
             </DialogClose>
           </DialogFooter>
           <Input
-            id='idPengeluaran'
-            name='idPengeluaran'
+            id='id'
+            name='id'
             type='hidden'
             value={formData.id}
+            onChange={handleChange}
+          />
+          <Input
+            id='past'
+            name='past'
+            type='hidden'
+            value={initialData[tipe]}
             onChange={handleChange}
           />
         </form>

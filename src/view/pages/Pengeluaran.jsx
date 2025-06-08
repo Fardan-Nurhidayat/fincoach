@@ -92,24 +92,56 @@ export default function Pengeluaran() {
   }, [getData]);
 
   // Form validation
+
   const validateForm = useCallback(
-    (amount, desc) => {
+    async (amount, desc, past) => {
+      // 1. Validasi input wajib terlebih dahulu
       if (!amount || !desc) {
         toast.error("Jumlah dan Kategori harus diisi");
         return false;
       }
 
-      if (
-        expensesState.limit < amount ||
-        expensesState.jumlah + amount > expensesState.limit
-      ) {
-        toast.error("Jumlah Pengeluaran melebihi limit");
+      // 2. Konversi ke number dan validasi
+      const currentAmount = Number(amount);
+      const pastAmount = Number(past) || 0; // Default ke 0 jika past tidak valid
+
+      if (isNaN(currentAmount) || currentAmount <= 0) {
+        toast.error("Jumlah harus berupa angka yang valid dan lebih dari 0");
         return false;
       }
 
-      return true;
+      // 3. Hitung selisih dengan logika yang lebih jelas
+      const difference = currentAmount - pastAmount;
+
+      try {
+        // 4. Tunggu totalPengeluaran dan hitung total baru
+        const currentTotal = await totalPengeluaran;
+        const newTotal = currentTotal + difference;
+
+        // 5. Validasi terhadap limit
+        if (newTotal > expensesState.limit) {
+          toast.error(
+            `Total pengeluaran (${newTotal.toLocaleString()}) akan melebihi limit (${expensesState.limit.toLocaleString()})`
+          );
+          return false;
+        }
+
+        // 6. Validasi individual amount terhadap limit (optional)
+        if (currentAmount > expensesState.limit) {
+          toast.error(
+            `Jumlah pengeluaran tidak boleh melebihi total limit (${expensesState.limit.toLocaleString()})`
+          );
+          return false;
+        }
+
+        return true;
+      } catch (error) {
+        console.error("Error validating form:", error);
+        toast.error("Terjadi kesalahan saat validasi");
+        return false;
+      }
     },
-    [expensesState.limit, expensesState.jumlah]
+    [expensesState.limit, totalPengeluaran] // Tambahkan totalPengeluaran ke dependency
   );
 
   // Submit handler for adding new expense
@@ -121,7 +153,7 @@ export default function Pengeluaran() {
       const amount = parseInt(formData.get("pengeluaran"), 10);
       const desc = formData.get("kategori");
 
-      if (!validateForm(amount, desc)) {
+      if (!validateForm(amount, desc, (past = 0))) {
         return;
       }
 
@@ -154,14 +186,15 @@ export default function Pengeluaran() {
     async e => {
       e.preventDefault();
       const formData = new FormData(e.target);
-      const id = formData.get("idPengeluaran");
+      const id = formData.get("id");
+      const pastValue = formData.get("past");
       const expenses = parseInt(formData.get("expenses"), 10);
       const category = formData.get("category");
 
-      if (!validateForm(expenses, category)) {
+      const isValid = await validateForm(expenses, category, pastValue);
+      if (!isValid) {
         return;
       }
-
       try {
         const newData = { expenses, category };
         await updateData({
@@ -185,7 +218,7 @@ export default function Pengeluaran() {
         console.error("Error updating expense:", error);
       }
     },
-    [updateData, fetchPengeluaran]
+    [validateForm]
   );
 
   // Delete handler

@@ -119,6 +119,7 @@ export default function TableTemplate({
                 <TableCell className='px-6 py-4 flex justify-end gap-2'>
                   <DialogTemplate
                     key={item.id}
+                    tipe={jenis}
                     trigger={
                       <Button
                         variant='outline'
