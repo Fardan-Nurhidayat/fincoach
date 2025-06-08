@@ -30,15 +30,15 @@ import { useIsMobile } from "@/hooks/use-mobile";
 // Konfigurasi warna dan label untuk chart
 const chartConfig = {
   expenses: {
-    label: "Pengeluaran",
+    label: "Pengeluaran ",
     color: "#dc2626",
   },
   savings: {
-    label: "Tabungan",
+    label: "Tabungan ",
     color: "#16a34a",
   },
   investments: {
-    label: "Investasi",
+    label: "Investasi ",
     color: "#9333ea",
   },
 };
@@ -192,9 +192,10 @@ export function ChartSection() {
               minTickGap={32}
               tickFormatter={value => {
                 const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
+                return date.toLocaleDateString("id-ID", {
                   day: "numeric",
+                  month: "long",
+                  year: "numeric",
                 });
               }}
             />
@@ -203,11 +204,13 @@ export function ChartSection() {
               content={
                 <ChartTooltipContent
                   labelFormatter={value => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
+                    return new Date(value).toLocaleDateString("id-ID", {
                       day: "numeric",
+                      month: "long",
+                      year: "numeric",
                     });
                   }}
+                  formatter={value => [`Rp ${value.toLocaleString("id-ID")}`]}
                   indicator='dot'
                 />
               }

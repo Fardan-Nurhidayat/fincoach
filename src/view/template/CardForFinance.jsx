@@ -83,7 +83,7 @@ export default function CardAndModalTemplate({
               Masukkan informasi {title.toLowerCase()}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={(e) => onSubmit(e)}>
+          <form onSubmit={e => onSubmit(e)}>
             <div className='grid gap-4 py-4'>
               {formFields.map(field => (
                 <div
@@ -96,6 +96,7 @@ export default function CardAndModalTemplate({
                   </Label>
                   <Input
                     id={field.id}
+                    name={field.id}
                     type={field.type || "text"}
                     placeholder={field.placeholder}
                     className={`col-span-3 border-gray-300 ${selectedColor.focus} ${selectedColor.border}`}

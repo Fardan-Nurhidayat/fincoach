@@ -55,7 +55,7 @@ export default function CardSection() {
     const desc = e.target.desc.value;
 
     if (status === "expense") {
-      if (amount > expensesState.limit) {
+      if (amount => expensesState.limit) {
         toast.error("Pengeluaran melebihi batas limit!", toastConfig);
         return;
       } else if (expensesState.jumlah + amount >= expensesState.limit) {
@@ -64,11 +64,17 @@ export default function CardSection() {
           toastConfig
         );
         return;
+      } else if (sisa <= amount) {
+        toast.error(
+          "Sisa dana tidak cukup untuk menambah pengeluaran!",
+          toastConfig
+        );
+        return;
       }
 
       await postExpense(amount, desc);
     } else if (status === "saving") {
-      if (amount > savingsState.limit) {
+      if (amount => savingsState.limit) {
         toast.error("Tabungan melebihi batas limit!", toastConfig);
         return;
       } else if (savingsState.jumlah + amount >= savingsState.limit) {
@@ -86,7 +92,7 @@ export default function CardSection() {
       }
       await postSavings(amount, desc);
     } else if (status === "investment") {
-      if (amount > investmentsState.limit) {
+      if (amount => investmentsState.limit) {
         toast.error("Investasi melebihi batas limit!", toastConfig);
         return;
       } else if (investmentsState.jumlah + amount >= investmentsState.limit) {

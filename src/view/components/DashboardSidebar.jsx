@@ -3,7 +3,6 @@ import { Button } from "../components/ui/button";
 import { Separator } from "../components/ui/separator";
 import { ChevronDownIcon } from "@radix-ui/react-icons"; // Example icon, you might need to install @radix-ui/react-icons
 import { Link } from "react-router";
-
 import { api } from "@/utils/api";
 
 const DashboardSidebar = () => {
@@ -193,7 +192,11 @@ const DashboardSidebar = () => {
       {/* Log Out Button */}
       <Button
         variant='ghost'
-        className='justify-start text-white hover:bg-white'>
+        onClick={() => {
+          localStorage.removeItem("fincoach_token");
+          window.location.href = "/login";
+        }}
+        className='justify-start text-white hover:bg-white cursor-pointer transition-colors'>
         <span className='mr-2'>➡️</span> Log out
       </Button>
     </aside>

@@ -57,7 +57,7 @@ export default function DialogTemplate({
             {description}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={e => onSubmit(e)}>
           <div className='grid gap-4 py-4'>
             {fields.map(field => (
               <div
@@ -70,6 +70,7 @@ export default function DialogTemplate({
                 </Label>
                 <Input
                   id={field.id}
+                  name={field.id}
                   type={field.type || "text"}
                   placeholder={field.placeholder}
                   value={formData[field.id] || ""}
