@@ -1,152 +1,186 @@
-export default function Simulasi() {
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+
+const Simulasi = () => {
+  const [monthlyIncome, setMonthlyIncome] = useState(5000000);
+  const [riskProfile, setRiskProfile] = useState("low");
+  const [showResults, setShowResults] = useState(false);
+
+  // Alokasi berdasarkan profil risiko
+  const allocations = {
+    low: { expense: 0.5, saving: 0.3, investment: 0.2 },
+    medium: { expense: 0.5, saving: 0.2, investment: 0.3 },
+    high: { expense: 0.4, saving: 0.2, investment: 0.4 },
+  };
+
+  const selectedAllocation = allocations[riskProfile];
+
+  const simulate = () => {
+    if (monthlyIncome <= 0) return;
+    setShowResults(true);
+  };
+
+  const expenses = monthlyIncome * selectedAllocation.expense;
+  const savings = monthlyIncome * selectedAllocation.saving;
+  const investment = monthlyIncome * selectedAllocation.investment;
+
+  const simulationCards = [
+    {
+      title: "Pengeluaran",
+      description: "Dana yang dapat Anda gunakan untuk keseharian sebesar",
+      percentage: `${selectedAllocation.expense * 100}%`,
+      amount: expenses,
+      color: "red",
+    },
+    {
+      title: "Tabungan",
+      description: "Dana yang dapat Anda gunakan untuk menabung sebesar",
+      percentage: `${selectedAllocation.saving * 100}%`,
+      amount: savings,
+      color: "blue",
+    },
+    {
+      title: "Investasi",
+      description: "Dana yang dapat Anda gunakan untuk investasi sebesar",
+      percentage: `${selectedAllocation.investment * 100}%`,
+      amount: investment,
+      color: "purple",
+    },
+  ];
+
   return (
-    <section id="simulasi" className="text-gray-600 body-font">
-      <div className="container px-5 py-24 mx-auto flex flex-wrap">
-        <div className="flex flex-wrap w-full">
-          <div className="lg:w-2/5 md:w-1/2 md:pr-10 md:py-6">
-            <div className="flex relative pb-12">
-              <div className="h-full w-10 absolute inset-0 flex items-center justify-center">
-                <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
-              </div>
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 inline-flex items-center justify-center text-white relative z-10">
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-              </div>
-              <div className="flex-grow pl-4">
-                <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">
-                  STEP 1
-                </h2>
-                <p className="leading-relaxed">
-                  VHS cornhole pop-up, try-hard 8-bit iceland helvetica. Kinfolk
-                  bespoke try-hard cliche palo santo offal.
-                </p>
-              </div>
+    <div className="bg-gradient-to-b from-white to-purple-50 py-16">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col items-center text-center mb-16"
+        >
+          <h1 className="text-3xl font-bold text-center mb-8 text-gray-900">
+            Simulasi Keuangan Bulanan
+          </h1>
+          <p className="text-lg text-center mb-12 text-gray-600">
+            Masukkan pemasukan bulanan untuk melihat alokasi keuangan Anda.
+          </p>
+        </motion.div>
+
+        <div className="flex flex-col md:flex-row gap-8 items-start">
+          {/* Form Input */}
+          <div className="md:w-1/2 w-full bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Masukkan Pemasukan</h2>
+            <div className="mb-4">
+              <label htmlFor="income" className="block font-medium mb-2">
+                Pemasukan Bulanan
+              </label>
+              <input
+                id="income"
+                type="number"
+                min="0"
+                value={monthlyIncome}
+                onChange={(e) => setMonthlyIncome(Number(e.target.value))}
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:border-purple-500 transition duration-300"
+              />
             </div>
-            <div className="flex relative pb-12">
-              <div className="h-full w-10 absolute inset-0 flex items-center justify-center">
-                <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
-              </div>
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 inline-flex items-center justify-center text-white relative z-10">
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                </svg>
-              </div>
-              <div className="flex-grow pl-4">
-                <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">
-                  STEP 2
-                </h2>
-                <p className="leading-relaxed">
-                  Vice migas literally kitsch +1 pok pok. Truffaut hot chicken
-                  slow-carb health goth, vape typewriter.
-                </p>
-              </div>
+
+            <div className="mb-4">
+              <label htmlFor="riskProfile" className="block font-medium mb-2">
+                Profil Risiko
+              </label>
+              <select
+                id="riskProfile"
+                value={riskProfile}
+                onChange={(e) => setRiskProfile(e.target.value)}
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:border-purple-500 transition duration-300"
+              >
+                <option value="low">
+                  Rendah (50% Pengeluaran, 30% Tabungan, 20% Investasi)
+                </option>
+                <option value="medium">
+                  Sedang (50% Pengeluaran, 20% Tabungan, 30% Investasi)
+                </option>
+                <option value="high">
+                  Tinggi (40% Pengeluaran, 20% Tabungan, 40% Investasi)
+                </option>
+              </select>
             </div>
-            <div className="flex relative pb-12">
-              <div className="h-full w-10 absolute inset-0 flex items-center justify-center">
-                <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
-              </div>
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 inline-flex items-center justify-center text-white relative z-10">
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
-                >
-                  <circle cx="12" cy="5" r="3"></circle>
-                  <path d="M12 22V8M5 12H2a10 10 0 0020 0h-3"></path>
-                </svg>
-              </div>
-              <div className="flex-grow pl-4">
-                <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">
-                  STEP 3
-                </h2>
-                <p className="leading-relaxed">
-                  Coloring book nar whal glossier master cleanse umami. Salvia
-                  +1 master cleanse blog taiyaki.
-                </p>
-              </div>
-            </div>
-            <div className="flex relative pb-12">
-              <div className="h-full w-10 absolute inset-0 flex items-center justify-center">
-                <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
-              </div>
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 inline-flex items-center justify-center text-white relative z-10">
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </div>
-              <div className="flex-grow pl-4">
-                <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">
-                  STEP 4
-                </h2>
-                <p className="leading-relaxed">
-                  VHS cornhole pop-up, try-hard 8-bit iceland helvetica. Kinfolk
-                  bespoke try-hard cliche palo santo offal.
-                </p>
-              </div>
-            </div>
-            <div className="flex relative">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 inline-flex items-center justify-center text-white relative z-10">
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
-                  <path d="M22 4L12 14.01l-3-3"></path>
-                </svg>
-              </div>
-              <div className="flex-grow pl-4">
-                <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">
-                  FINISH
-                </h2>
-                <p className="leading-relaxed">
-                  Pitchfork ugh tattooed scenester echo park gastropub whatever
-                  cold-pressed retro.
-                </p>
-              </div>
-            </div>
+
+            <button
+              onClick={simulate}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-md transition duration-300"
+            >
+              Simulasikan
+            </button>
           </div>
-          <img
-            className="lg:w-3/5 md:w-1/2 object-cover object-center rounded-lg md:mt-0 mt-12"
-            src="https://dummyimage.com/1200x500"
-            alt="step"
-          />
+
+          {/* Hasil Simulasi */}
+          {showResults && (
+            <div className="md:w-3/4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {simulationCards.map((item, index) => (
+                <SimulationCard key={index} item={item} index={index} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
-    </section>
+    </div>
   );
-}
+};
+
+// Component Kartu Simulasi
+const SimulationCard = ({ item, index }) => {
+  const colors = {
+    red: {
+      textMain: "text-red-700",
+      textBold: "text-red-800",
+      bg: "bg-red-50",
+      border: "border-red-200",
+    },
+    blue: {
+      textMain: "text-blue-700",
+      textBold: "text-blue-800",
+      bg: "bg-blue-50",
+      border: "border-blue-200",
+    },
+    purple: {
+      textMain: "text-purple-700",
+      textBold: "text-purple-800",
+      bg: "bg-purple-50",
+      border: "border-purple-200",
+    },
+  };
+
+  const selectedColor = colors[item.color];
+
+  return (
+    <motion.div
+      initial={{ x: 100, opacity: 0 }}
+      whileInView={{ x: 0, opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{
+        type: "spring",
+        stiffness: 80,
+        damping: 15,
+        delay: 0.1 + index * 0.1,
+      }}
+      className={`${selectedColor.bg} border ${selectedColor.border} p-5 rounded-lg shadow-sm hover:shadow-lg transition duration-300`}
+    >
+      <h2 className={`font-semibold text-xl ${selectedColor.textMain} mb-4`}>
+        {item.title}
+      </h2>
+      <p className="text-gray-600 mb-2">
+        {item.description}
+        <span className={`font-bold ${selectedColor.textBold}`}>
+          {" "}
+          {item.percentage}
+        </span>{" "}
+        dari pemasukan Anda atau setara dengan
+      </p>
+      <p className={`text-xl font-semibold ${selectedColor.textMain}`}>
+        Rp{Math.round(item.amount).toLocaleString()}
+      </p>
+    </motion.div>
+  );
+};
+
+export default Simulasi;

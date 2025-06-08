@@ -37,7 +37,6 @@ export function LoginForm({ className, ...props }) {
       localStorage.setItem("fincoach_token", token);
       api.setToken(token); // Set token untuk API
       const res = await api.get("/users/profile");
-      console.log("User profile:", res);
       if (res) {
         navigate("/dashboard");
       } else {
