@@ -9,27 +9,19 @@ import Pengeluaran from "@/view/pages/Pengeluaran";
 import Investasi from "./view/pages/Investasi";
 import SahamPerusahaan from "./view/pages/SahamPerusahaan";
 import Tabungan from "./view/pages/Tabungan";
+import Pemasukan from "./view/pages/Pemasukan";
 
 const App = () => (
   <BrowserRouter>
     <Routes>
       {/* Rute Publik */}
-      <Route
-        path='/'
-        element={<Welcome />}
-      />
-      <Route
-        path='/login'
-        element={<LoginForm />}
-      />
-      <Route
-        path='/register'
-        element={<RegisterForm />}
-      />
+      <Route path="/" element={<Welcome />} />
+      <Route path="/login" element={<LoginForm />} />
+      <Route path="/register" element={<RegisterForm />} />
 
       {/* Rute Terproteksi */}
       <Route
-        path='/dashboard'
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <Dashboard />
@@ -37,14 +29,23 @@ const App = () => (
         }
       />
       <Route
-        path='/pengeluaran'
+        path="/pemasukan"
+        element={
+          <ProtectedRoute>
+            <Pemasukan />
+          </ProtectedRoute>
+        }
+      ></Route>
+      <Route
+        path="/pengeluaran"
         element={
           <ProtectedRoute>
             <Pengeluaran />
           </ProtectedRoute>
-        }></Route>
+        }
+      ></Route>
       <Route
-        path='/investasi'
+        path="/investasi"
         element={
           <ProtectedRoute>
             <Investasi />
@@ -53,7 +54,7 @@ const App = () => (
       />
 
       <Route
-        path='/saham-perusahaan'
+        path="/saham-perusahaan"
         element={
           <ProtectedRoute>
             <SahamPerusahaan />
@@ -61,7 +62,7 @@ const App = () => (
         }
       />
       <Route
-        path='/tabungan'
+        path="/tabungan"
         element={
           <ProtectedRoute>
             <Tabungan />
