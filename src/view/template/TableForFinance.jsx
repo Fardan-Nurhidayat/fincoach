@@ -33,14 +33,14 @@ export default function TableTemplate({
       alasan: "instrumen",
       placeholder: "Saham , Obligasi , dll",
     },
-    pemasukan: {
+    income: {
       label: "pemasukan",
-      alasan: "sumber",
+      alasan: "source",
       placeholder: "Gaji , Penjualan , dll",
     },
-    tabungan: {
+    savings: {
       label: "tabungan",
-      alasan: "tujuan",
+      alasan: "goal",
       placeholder: "Dana Darurat , Simpanan , dll",
     },
   };
@@ -113,7 +113,7 @@ export default function TableTemplate({
                 </TableCell>
                 <TableCell className='px-6 py-4 text-gray-800'>
                   <span className='inline-block px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800'>
-                    {item.category || "Umum"}
+                    {item[alasan] || "Umum"}
                   </span>
                 </TableCell>
                 <TableCell className='px-6 py-4 flex justify-end gap-2'>
