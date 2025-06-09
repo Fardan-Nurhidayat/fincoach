@@ -29,8 +29,8 @@ export default function CardAndModalTemplate({
       focus: "focus:border-red-500",
     },
     investasi: {
-      gradient: "from-green-500 to-green-600",
-      text: "text-green-500",
+      gradient: "from-green-500 to-green-200",
+      text: "text-green-600",
       border: "border-green-300",
       focus: "focus:border-green-500",
     },

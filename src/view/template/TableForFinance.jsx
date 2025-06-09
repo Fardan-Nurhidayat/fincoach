@@ -30,7 +30,7 @@ export default function TableTemplate({
     },
     investments: {
       label: "investasi",
-      alasan: "instrumen",
+      alasan: "instrument",
       placeholder: "Saham , Obligasi , dll",
     },
     income: {
@@ -146,7 +146,7 @@ export default function TableTemplate({
                       },
                     ]}
                     onSubmit={submitHandler}
-                    submitText='Update Pengeluaran'
+                    submitText='Update Data'
                     cancelText='Batal'
                     initialData={editData}
                     variant='destructive'></DialogTemplate>
