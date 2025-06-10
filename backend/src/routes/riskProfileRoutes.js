@@ -1,6 +1,5 @@
-import * as riskProfileService from '../services/riskProfileService.js';
+import * as riskProfileController from '../controllers/riskProfileController.js';
 import { verifyToken } from '../middleware/auth.js';
-import path from 'path';
 
 const routes = [
   {
@@ -9,7 +8,7 @@ const routes = [
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: riskProfileService.getRiskProfile,
+    handler: riskProfileController.getRiskProfile,
   },
   {
     method: 'POST',
@@ -17,7 +16,7 @@ const routes = [
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: riskProfileService.createRiskProfile,
+    handler: riskProfileController.createRiskProfile,
   },
   {
     method: 'PUT',
@@ -25,7 +24,7 @@ const routes = [
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: riskProfileService.updateRiskProfile,
+    handler: riskProfileController.updateRiskProfile,
   },
   {
     method: 'DELETE',
@@ -33,7 +32,7 @@ const routes = [
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: riskProfileService.deleteRiskProfile,
+    handler: riskProfileController.deleteRiskProfile,
   },
   {
     method: 'GET',
@@ -41,7 +40,7 @@ const routes = [
     options: {
       pre: [{ method: verifyToken }],
     },
-    handler: riskProfileService.getRiskProfileById,
+    handler: riskProfileController.getRiskProfileById,
   },
 ];
 
