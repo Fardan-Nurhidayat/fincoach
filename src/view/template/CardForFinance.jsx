@@ -52,49 +52,53 @@ export default function CardAndModalTemplate({
 
   return (
     <div
-      className={`lg:col-span-2 bg-gradient-to-r ${selectedColor.gradient} rounded-xl p-6 shadow-lg transition-all hover:shadow-2xl`}
-    >
-      <h2 className="text-white text-xl font-semibold">{title}</h2>
-      <div className="mt-2 text-white text-3xl font-bold flex items-center gap-2">
+      className={`lg:col-span-2 bg-gradient-to-r ${selectedColor.gradient} rounded-xl p-6 shadow-lg transition-all hover:shadow-2xl`}>
+      <h2 className='text-white text-xl font-semibold'>{title}</h2>
+      <div className='mt-2 text-white text-3xl font-bold flex items-center gap-2'>
         {currentTotal !== undefined ? (
           <>
-            Rp {currentTotal.toLocaleString("id-ID")}{" "}
-            <span className={`${selectedColor.text} text-xl`}>/</span>{" "}
-            <span className="text-white text-xl font-normal">
-              Rp {limit.toLocaleString("id-ID")}
-            </span>
+            {jenis === "pemasukan" ? (
+              <> Rp {currentTotal.toLocaleString("id-ID")} </>
+            ) : (
+              <>
+                Rp {currentTotal.toLocaleString("id-ID")}{" "}
+                <span className={`${selectedColor.text} text-xl`}>/</span>{" "}
+                <span className='text-white text-xl font-normal'>
+                  Rp {limit.toLocaleString("id-ID")}
+                </span>
+              </>
+            )}
           </>
         ) : (
-          <span className="animate-pulse">Rp ••••••</span>
+          <span className='animate-pulse'>Rp ••••••</span>
         )}
       </div>
 
       <Dialog>
         <DialogTrigger asChild>
-          <button className={`px-4 py-2 mt-4 rounded-lg bg-white font-semibold cursor-pointer ${selectedColor.text} transition-all duration-300 shadow-lg group-hover:shadow-xl`}>
+          <button
+            className={`px-4 py-2 mt-4 rounded-lg bg-white font-semibold cursor-pointer ${selectedColor.text} transition-all duration-300 shadow-lg group-hover:shadow-xl`}>
             {triggerText}
           </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] rounded-xl border-gray-200 shadow-xl">
+        <DialogContent className='sm:max-w-[425px] rounded-xl border-gray-200 shadow-xl'>
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-gray-800">
+            <DialogTitle className='text-2xl font-bold text-gray-800'>
               Tambah {title}
             </DialogTitle>
-            <DialogDescription className="text-gray-500">
+            <DialogDescription className='text-gray-500'>
               Masukkan informasi {title.toLowerCase()}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={(e) => onSubmit(e)}>
-            <div className="grid gap-4 py-4">
-              {formFields.map((field) => (
+          <form onSubmit={e => onSubmit(e)}>
+            <div className='grid gap-4 py-4'>
+              {formFields.map(field => (
                 <div
                   key={field.id}
-                  className="grid grid-cols-4 items-center gap-4"
-                >
+                  className='grid grid-cols-4 items-center gap-4'>
                   <Label
                     htmlFor={field.id}
-                    className="text-right text-gray-700"
-                  >
+                    className='text-right text-gray-700'>
                     {field.label}
                   </Label>
                   <Input
@@ -109,9 +113,8 @@ export default function CardAndModalTemplate({
             </div>
             <DialogFooter>
               <Button
-                type="submit"
-                className={`bg-gradient-to-r ${selectedColor.gradient} cursor-pointer`}
-              >
+                type='submit'
+                className={`bg-gradient-to-r ${selectedColor.gradient} cursor-pointer`}>
                 {triggerText}
               </Button>
             </DialogFooter>
