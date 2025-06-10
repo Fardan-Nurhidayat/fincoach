@@ -8,9 +8,7 @@ import { api } from "@/utils/api";
 const DashboardSidebar = () => {
   // Placeholder for dropdown state
   const [profile, setProfile] = useState({});
-  const [isYieldsOpen, setIsYieldsOpen] = useState(false);
   const [investasiOpen, setIsInvestasiOpen] = useState(false);
-  const [isDexesOpen, setIsDexesOpen] = useState(false);
   const getProfile = async () => {
     try {
       const response = await api.get("/users/profile");

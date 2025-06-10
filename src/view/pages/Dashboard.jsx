@@ -1,8 +1,7 @@
 import DashboardLayout from "../components/DashboardLayout";
 import CardSection from "../components/CardSection";
 import { ChartSection } from "../components/ChartSection";
-// import { DialogTrigger } from "@/view/components/ui/dialog";
-import DialogProfile from "../components/DiaLogProfile";
+import DialogProfile from "@/view/components/DiaLogProfile";
 
 export default function Dashboard() {
   const getProfileResiko = localStorage.getItem("profileResiko");

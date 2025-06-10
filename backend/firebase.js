@@ -1,4 +1,4 @@
-import { initializeApp, applicationDefault, cert } from "firebase-admin/app";
+import { initializeApp, cert } from "firebase-admin/app";
 import {
   getFirestore,
   Timestamp,
