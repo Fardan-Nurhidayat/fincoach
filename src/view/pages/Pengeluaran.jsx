@@ -152,8 +152,8 @@ export default function Pengeluaran() {
       const formData = new FormData(e.target);
       const amount = parseInt(formData.get("pengeluaran"), 10);
       const desc = formData.get("kategori");
-
-      if (!validateForm(amount, desc, (past = 0))) {
+      const past = 0;
+      if (!validateForm(amount, desc, past)) {
         return;
       }
 
