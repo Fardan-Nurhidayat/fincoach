@@ -59,14 +59,14 @@ export default function ChartPrediksiSaham({ symbol }) {
   // Memoize expensive calculations
   const maxDataPoints = useMemo(() => {
     const pointsMap = {
-      "5m": 50,
-      "15m": 80,
-      "30m": 50,
-      "1h": 50,
-      "1d": 50,
-      "1wk": 50,
-      "1mo": 50,
-      "3mo": 50,
+      "5m": 40,
+      "15m": 40,
+      "30m": 30,
+      "1h": 20,
+      "1d": 20,
+      "1wk": 20,
+      "1mo": 20,
+      "3mo": 20,
     };
     return pointsMap[timeRange] || 100;
   }, [timeRange]);
