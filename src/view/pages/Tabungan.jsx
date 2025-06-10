@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import TabunganLayout from "@/view/components/Tabungan-layout";
+import TabunganLayout from "@/view/components/tabungan-layout";
 import Header from "../template/HeaderForFinance";
 import ChartTemplate from "../template/ChartForFinance";
 import CardAndModalTemplate from "../template/CardForFinance";
@@ -24,14 +24,14 @@ const FORM_FIELDS = [
 // Chart Config
 const CHART_CONFIG = {
   label: "Tabungan",
-  color: "#22c55e", 
+  color: "#22c55e",
 };
 
 // Utility Functions
 const groupSavingsByDate = data => {
   const savingsByDate = new Map();
 
-  data.forEach((item) => {
+  data.forEach(item => {
     const dateOnly = new Date(item.date).toISOString().split("T")[0];
     const currentTotal = savingsByDate.get(dateOnly) || 0;
     savingsByDate.set(dateOnly, currentTotal + item.savings);
@@ -143,7 +143,7 @@ export default function Tabungan() {
 
   // Submit Handler
   const submitHandler = useCallback(
-    async (e) => {
+    async e => {
       e.preventDefault();
       const formData = new FormData(e.target);
       const amount = parseInt(formData.get("tabungan"), 10);
@@ -164,7 +164,7 @@ export default function Tabungan() {
           };
           console.log(e.target);
 
-          setTabunganData((prev) => [...prev, newSaving]);
+          setTabunganData(prev => [...prev, newSaving]);
           e.target.reset();
           fetchTabungan();
         }
@@ -177,7 +177,7 @@ export default function Tabungan() {
 
   // Update Handler
   const updateHandler = useCallback(
-    async (e) => {
+    async e => {
       e.preventDefault();
       const formData = new FormData(e.target);
       const id = formData.get("id");
@@ -198,8 +198,8 @@ export default function Tabungan() {
           tipe: "savings",
         });
 
-        setTabunganData((prev) =>
-          prev.map((item) =>
+        setTabunganData(prev =>
+          prev.map(item =>
             item.id === parseInt(id) ? { ...item, savings, goal } : item
           )
         );
@@ -214,7 +214,7 @@ export default function Tabungan() {
 
   // Delete Handler
   const handleDelete = useCallback(
-    async (id) => {
+    async id => {
       try {
         const success = await deleteData({
           path: "/savings",
@@ -223,7 +223,7 @@ export default function Tabungan() {
         });
 
         if (success) {
-          setTabunganData((prev) => prev.filter((item) => item.id !== id));
+          setTabunganData(prev => prev.filter(item => item.id !== id));
           fetchTabungan();
         }
       } catch (error) {
@@ -242,10 +242,10 @@ export default function Tabungan() {
   if (isLoading || globalLoading) {
     return (
       <TabunganLayout>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8'>
+          <div className='max-w-6xl mx-auto'>
+            <div className='flex items-center justify-center h-64'>
+              <div className='animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900'></div>
             </div>
           </div>
         </div>
@@ -257,14 +257,13 @@ export default function Tabungan() {
   if (globalError) {
     return (
       <TabunganLayout>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-              <p className="text-red-800">Terjadi kesalahan saat memuat data</p>
+        <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8'>
+          <div className='max-w-6xl mx-auto'>
+            <div className='bg-red-50 border border-red-200 rounded-lg p-4 text-center'>
+              <p className='text-red-800'>Terjadi kesalahan saat memuat data</p>
               <button
                 onClick={fetchTabungan}
-                className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              >
+                className='mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700'>
                 Coba Lagi
               </button>
             </div>
@@ -276,41 +275,43 @@ export default function Tabungan() {
 
   return (
     <TabunganLayout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8">
-        <div className="max-w-6xl mx-auto">
+      <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8'>
+        <div className='max-w-6xl mx-auto'>
           {/* Header */}
-          <Header title="Tabungan"
-            description="Rencanakan masa depanmu!" />
+          <Header
+            title='Tabungan'
+            description='Rencanakan masa depanmu!'
+          />
 
           {/* Card & Modal */}
           <CardAndModalTemplate
-            title="Tabungan"
+            title='Tabungan'
             currentTotal={totalTabungan}
             limit={savingsState.limit}
-            jenis="tabungan"
-            triggerText="Tambah Tabungan"
+            jenis='tabungan'
+            triggerText='Tambah Tabungan'
             formFields={FORM_FIELDS}
             onSubmit={submitHandler}
           />
 
           {/* Chart Section */}
-          <div className="bg-white rounded-2xl mt-5 shadow-xl p-4 sm:p-6 md:p-8 border border-gray-100 transition-all hover:shadow-2xl">
-            <h3 className="text-xl font-semibold text-gray-700 mb-6">
+          <div className='bg-white rounded-2xl mt-5 shadow-xl p-4 sm:p-6 md:p-8 border border-gray-100 transition-all hover:shadow-2xl'>
+            <h3 className='text-xl font-semibold text-gray-700 mb-6'>
               Histori Tabungan
             </h3>
             <ChartTemplate
-              titleChart="Tabungan"
-              descriptionChart="Histori Tabungan Anda"
+              titleChart='Tabungan'
+              descriptionChart='Histori Tabungan Anda'
               dataChartRaw={sumTabunganData}
               configChart={CHART_CONFIG}
-              valueKey="savings"
+              valueKey='savings'
             />
           </div>
 
           {/* Table Section */}
           <TableTemplate
             data={tabunganData}
-            jenis="savings"
+            jenis='savings'
             submitHandler={updateHandler}
             getDetailData={getDetailData}
             deleteHandler={handleDelete}
