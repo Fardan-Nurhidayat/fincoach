@@ -43,7 +43,7 @@ const chartConfig = {
   },
 };
 
-export function ChartSection() {
+export default function ChartSection() {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState("90d");
   const { getAllFinancialData } = useFinancialData();

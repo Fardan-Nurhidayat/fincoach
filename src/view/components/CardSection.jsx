@@ -1,7 +1,4 @@
 import { ToastContainer, toast } from "react-toastify";
-
-import { profilResiko } from "../../utils/CardDashboard.js";
-
 import {
   Dialog,
   DialogContent,
@@ -23,10 +20,11 @@ import {
   CardAction,
   CardContent,
 } from "./ui/card";
-
+import { useState, useEffect, memo, useMemo } from "react";
 import { IconPlus } from "@tabler/icons-react";
 import { useFinancialData } from "../../hooks/useFinancialData.js";
-export default function CardSection() {
+
+export default memo(function CardSection({ profilResiko, dataVersion }) {
   const {
     income,
     expensesState,
@@ -40,6 +38,7 @@ export default function CardSection() {
     postInvestment,
     toastConfig,
   } = useFinancialData();
+
   const incomeHandler = async e => {
     e.preventDefault();
     const amount = parseInt(e.target.pemasukan.value, 10);
@@ -48,12 +47,13 @@ export default function CardSection() {
     e.target.pemasukan.value = "";
     e.target.sumber.value = "";
   };
+
   const actionHandler = async e => {
     e.preventDefault();
     const status = e.target.status.value;
     const amount = parseInt(e.target.amount.value, 10);
     const desc = e.target.desc.value;
-    console.log(amount, desc, status, expensesState.jumlah);
+
     if (status === "expense") {
       if (amount >= expensesState.limit) {
         toast.error("Pengeluaran melebihi batas limit!", toastConfig);
@@ -114,6 +114,46 @@ export default function CardSection() {
     e.target.desc.value = "";
   };
 
+  // Loading state yang lebih informatif
+  if (profilResiko === null || profilResiko === undefined) {
+    return (
+      <div className='flex items-center justify-center p-8'>
+        <div className='text-center'>
+          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto mb-4'></div>
+          <div className='text-slate-600'>Memuat data profil risiko...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Check jika profilResiko kosong (tidak ada data)
+  if (Object.keys(profilResiko).length === 0) {
+    return (
+      <div className='flex items-center justify-center p-8'>
+        <div className='text-center text-slate-600'>
+          Data profil risiko belum dibuat. Silakan buat profil risiko terlebih
+          dahulu.
+        </div>
+      </div>
+    );
+  }
+
+  // Pastikan profilResiko memiliki data yang diperlukan
+  if (
+    !profilResiko.expensesLimit ||
+    !profilResiko.savingsLimit ||
+    !profilResiko.investmentsLimit
+  ) {
+    return (
+      <div className='flex items-center justify-center p-8'>
+        <div className='text-center text-slate-600'>
+          Data profil risiko tidak lengkap. Silakan lengkapi profil Anda
+          terlebih dahulu.
+        </div>
+      </div>
+    );
+  }
+
   const data = [
     {
       title: "Pengeluaran",
@@ -144,17 +184,18 @@ export default function CardSection() {
     },
   ];
   return (
-    <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8'>
+    <div
+      key={dataVersion} // Gunakan dataVersion sebagai key untuk memaksa re-render
+      className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8'>
       {/* Kartu Input Pemasukan */}
-
       <Card className='border-0 hover:border-emerald-300/50 cursor-pointer hover:-translate-y-2.5 duration-300'>
         <CardHeader>
           <CardTitle className='text-slate-700 group-hover:text-emerald-700 transition-colors duration-300'>
             Pemasukan
           </CardTitle>
           <CardDescription className='text-slate-600'>
-            {profilResiko.pengeluaran}% / {profilResiko.tabungan}% /{" "}
-            {profilResiko.investasi}%
+            {profilResiko.expensesLimit}% / {profilResiko.savingsLimit}% /{" "}
+            {profilResiko.investmentsLimit}%
           </CardDescription>
           <CardAction>
             <Dialog>
@@ -221,10 +262,6 @@ export default function CardSection() {
             <CardDescription className='text-md sm:text-xl font-bold text-slate-400 group-hover:text-slate-900 transition-colors'>
               Pemakaian Rp. {pemakaian.toLocaleString("id-ID")}
             </CardDescription>
-            {/* <div className='flex items-center gap-2 text-xs text-emerald-600'> */}
-            {/* <div className='p-3 rounded-full bg-emerald-100'>IDR</div> */}
-            {/* <span>Total pemasukan bulan ini</span> */}
-            {/* </div> */}
           </div>
         </CardContent>
       </Card>
@@ -236,7 +273,7 @@ export default function CardSection() {
             : 0;
         return (
           <Card
-            key={index}
+            key={`${index}-${dataVersion}`} // Tambahkan dataVersion ke key
             className={`border-0 hover:border-${item.color}-300/50 cursor-pointer hover:-translate-y-2.5 duration-300`}>
             <CardHeader>
               <CardTitle
@@ -352,4 +389,4 @@ export default function CardSection() {
       <ToastContainer />
     </div>
   );
-}
+});
