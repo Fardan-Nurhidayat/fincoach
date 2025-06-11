@@ -1,7 +1,5 @@
 // pages/maintenance.js
 
-import { Link } from "react-router";
-
 export default function MaintenancePage() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800'>
