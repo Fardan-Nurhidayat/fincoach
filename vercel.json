@@ -3,8 +3,7 @@
     {
       "source": "/(.*)",
       "destination": "/maintenance",
-      "permanent": false,
-      "basePath": false
+      "permanent": false
     }
   ]
 }
