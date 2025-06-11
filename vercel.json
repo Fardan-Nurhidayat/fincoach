@@ -1,3 +1,10 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "/maintenance",
+      "permanent": false,
+      "basePath": false
+    }
+  ]
 }

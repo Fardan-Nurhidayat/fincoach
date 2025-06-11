@@ -4,6 +4,7 @@ import ProtectedRoute from "./view/components/ProtectedRoute";
 import Welcome from "./view/pages/Welcome";
 import { LoginForm } from "./view/components/login-form";
 import { RegisterForm } from "./view/components/register-form";
+import MaintenancePage from "./view/pages/Maintenance";
 import Dashboard from "./view/pages/Dashboard";
 import Pengeluaran from "@/view/pages/Pengeluaran";
 import Investasi from "./view/pages/Investasi";
@@ -15,13 +16,25 @@ const App = () => (
   <BrowserRouter>
     <Routes>
       {/* Rute Publik */}
-      <Route path="/" element={<Welcome />} />
-      <Route path="/login" element={<LoginForm />} />
-      <Route path="/register" element={<RegisterForm />} />
-
+      <Route
+        path='/'
+        element={<Welcome />}
+      />
+      <Route
+        path='/login'
+        element={<LoginForm />}
+      />
+      <Route
+        path='/register'
+        element={<RegisterForm />}
+      />
+      <Route
+        path='/maintenance'
+        element={<MaintenancePage />}
+      />
       {/* Rute Terproteksi */}
       <Route
-        path="/dashboard"
+        path='/dashboard'
         element={
           <ProtectedRoute>
             <Dashboard />
@@ -29,23 +42,21 @@ const App = () => (
         }
       />
       <Route
-        path="/pemasukan"
+        path='/pemasukan'
         element={
           <ProtectedRoute>
             <Pemasukan />
           </ProtectedRoute>
-        }
-      ></Route>
+        }></Route>
       <Route
-        path="/pengeluaran"
+        path='/pengeluaran'
         element={
           <ProtectedRoute>
             <Pengeluaran />
           </ProtectedRoute>
-        }
-      ></Route>
+        }></Route>
       <Route
-        path="/investasi"
+        path='/investasi'
         element={
           <ProtectedRoute>
             <Investasi />
@@ -54,7 +65,7 @@ const App = () => (
       />
 
       <Route
-        path="/saham-perusahaan"
+        path='/saham-perusahaan'
         element={
           <ProtectedRoute>
             <SahamPerusahaan />
@@ -62,7 +73,7 @@ const App = () => (
         }
       />
       <Route
-        path="/tabungan"
+        path='/tabungan'
         element={
           <ProtectedRoute>
             <Tabungan />
