@@ -13,7 +13,8 @@ FinCoach adalah aplikasi berbasis web yang membantu pengguna dalam mengelola keu
 ## 🛠️ Tech Stack
 
 - **Frontend**: [Vite](https://vitejs.dev/) + [Tailwind CSS](https://tailwindcss.com/)
-- **Build Tools**: JavaScript, HTML5, CSS3
+- **ML**: [Tensorflow](https://www.tensorflow.org/), [yfinance](https://ranaroussi.github.io/yfinance/), [FastApi](https://fastapi.tiangolo.com/)
+- **Build Tools**: JavaScript, HTML5, CSS3, Docker
 
 ## 📂 Struktur Proyek
 
@@ -84,6 +85,9 @@ git push -u origin <nama-branch>
 - [Fardan Nurhidayat](https://github.com/Fardan-Nurhidayat)
 - [Nafis Watsiq](https://github.com/nafiswatsiq)
 - Puput
+- [Wilbert Neilson Sachio](https://github.com/WilbertNeilsonSachio)
+- [Rio Octaviannus Loka](https://github.com/RioOctaviannusLoka)
+- [Satyavira Prathama](https://github.com/Satyavira)
 
 ## 🔗 Repository
 
