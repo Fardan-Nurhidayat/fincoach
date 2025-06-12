@@ -21,13 +21,6 @@ const ENDPOINTS = {
   PROFILE_RISK: "/risk-profile",
 };
 
-// Initial state factory
-const createInitialFinancialState = () => ({
-  jumlah: 0,
-  limit: 0,
-});
-
-// Error messages
 const ERROR_MESSAGES = {
   FETCH_INCOME: "Gagal memuat data pemasukan.",
   FETCH_EXPENSES: "Gagal memuat data pengeluaran.",
@@ -46,44 +39,46 @@ const ERROR_MESSAGES = {
   DELETE_DATA: "Gagal menghapus data",
 };
 
+const createInitialFinancialState = () => ({
+  jumlah: 0,
+  limit: 0,
+});
+
 export const useFinancialData = () => {
-  // State management
+  // State
   const [financialData, setFinancialData] = useState({
     income: { jumlah: 0, sumber: "" },
     expenses: createInitialFinancialState(),
     savings: createInitialFinancialState(),
     investments: createInitialFinancialState(),
   });
-
-  const [profileRisk, setProfileRisk] = useState(null); // Ubah dari [] ke null untuk deteksi loading state
-
-  const [derivedData, setDerivedData] = useState({
-    sisa: 0,
-    pemakaian: 0,
-  });
-
+  const [profileRisk, setProfileRisk] = useState(null);
+  const [derivedData, setDerivedData] = useState({ sisa: 0, pemakaian: 0 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [dataVersion, setDataVersion] = useState(0);
 
-  // Memoized calculations
-  const totalUsage = useMemo(() => {
-    return (
+  // Optimistic update helpers
+  const needsUpdate = useRef(false);
+
+  // Derived
+  const totalUsage = useMemo(
+    () =>
       financialData.expenses.jumlah +
       financialData.savings.jumlah +
-      financialData.investments.jumlah
-    );
-  }, [
-    financialData.expenses.jumlah,
-    financialData.savings.jumlah,
-    financialData.investments.jumlah,
-  ]);
+      financialData.investments.jumlah,
+    [
+      financialData.expenses.jumlah,
+      financialData.savings.jumlah,
+      financialData.investments.jumlah,
+    ]
+  );
 
-  const remainingAmount = useMemo(() => {
-    return financialData.income.jumlah - totalUsage;
-  }, [financialData.income.jumlah, totalUsage]);
+  const remainingAmount = useMemo(
+    () => financialData.income.jumlah - totalUsage,
+    [financialData.income.jumlah, totalUsage]
+  );
 
-  // Update derived data when calculations change
   useEffect(() => {
     setDerivedData({
       sisa: remainingAmount,
@@ -91,14 +86,14 @@ export const useFinancialData = () => {
     });
   }, [remainingAmount, totalUsage]);
 
-  // Error handling utility
+  // Error handler
   const handleError = useCallback((error, message) => {
     console.error(message, error);
     setError(error);
     toast.error(message, TOAST_CONFIG);
   }, []);
 
-  // API call wrapper with error handling
+  // API call wrapper
   const apiCall = useCallback(
     async (apiFunc, errorMessage) => {
       try {
@@ -113,34 +108,27 @@ export const useFinancialData = () => {
     [handleError]
   );
 
-  // Calculate limits based on income and risk profile
+  // Limit calculation
   const calculateLimits = useCallback((totalIncome, riskProfile) => {
-    // Pastikan riskProfile ada dan memiliki properti yang dibutuhkan
     if (!riskProfile || !riskProfile.expensesLimit) {
-      return {
-        expenses: 0,
-        savings: 0,
-        investments: 0,
-      };
+      return { expenses: 0, savings: 0, investments: 0 };
     }
-
     return {
       expenses: (riskProfile.expensesLimit * totalIncome) / 100,
       savings: (riskProfile.savingsLimit * totalIncome) / 100,
-      investments: (riskProfile.investmentsLimit * totalIncome) / 100, // Fix typo dari invesmentsLimit
+      investments: (riskProfile.investmentsLimit * totalIncome) / 100,
     };
   }, []);
 
-  // Fetch individual financial data
-  const fetchFinancialCategory = useCallback(async (endpoint, category) => {
+  // Fetch category
+  const fetchFinancialCategory = useCallback(async (endpoint, key) => {
     const res = await api.get(endpoint);
-    if (!res) return 0;
-
-    const total = res.reduce((acc, item) => acc + Number(item[category]), 0);
+    if (!res) return { data: [], total: 0 };
+    const total = res.reduce((acc, item) => acc + Number(item[key]), 0);
     return { data: res, total };
   }, []);
 
-  // Get all financial data
+  // Fetch all
   const getAllFinancialData = useCallback(async () => {
     setLoading(true);
     try {
@@ -160,7 +148,6 @@ export const useFinancialData = () => {
             ERROR_MESSAGES.FETCH_INVESTMENTS
           ),
         ]);
-
       return {
         income: incomeRes || [],
         expenses: expensesRes || [],
@@ -169,22 +156,27 @@ export const useFinancialData = () => {
       };
     } catch (error) {
       handleError(error, ERROR_MESSAGES.FETCH_FINANCIAL);
-      return {
-        income: [],
-        expenses: [],
-        savings: [],
-        investments: [],
-      };
+      return { income: [], expenses: [], savings: [], investments: [] };
     } finally {
       setLoading(false);
     }
   }, [apiCall, handleError]);
 
-  // Get income and update all related data
+  // Update all financial state
+  const updateFinancialData = useCallback((totals, limits) => {
+    setFinancialData({
+      income: { jumlah: totals.income },
+      expenses: { jumlah: totals.expenses, limit: limits.expenses },
+      savings: { jumlah: totals.savings, limit: limits.savings },
+      investments: { jumlah: totals.investments, limit: limits.investments },
+    });
+    setDataVersion(v => v + 1);
+  }, []);
+
+  // Get income & related
   const getIncome = useCallback(
     async (customProfileRisk = null) => {
       setLoading(true);
-
       try {
         const incomeResult = await fetchFinancialCategory(
           ENDPOINTS.INCOME,
@@ -193,45 +185,37 @@ export const useFinancialData = () => {
         if (!incomeResult) return;
 
         const totalIncome = incomeResult.total;
-
-        // Gunakan profileRisk yang diberikan atau yang ada di state
         const currentProfileRisk = customProfileRisk || profileRisk;
         const limits = calculateLimits(totalIncome, currentProfileRisk);
 
-        // Fetch other financial data in parallel
         const [expensesResult, savingsResult, investmentsResult] =
           await Promise.all([
             fetchFinancialCategory(ENDPOINTS.EXPENSES, "expenses"),
             fetchFinancialCategory(ENDPOINTS.SAVINGS, "savings"),
             fetchFinancialCategory(ENDPOINTS.INVESTMENTS, "investments"),
           ]);
-
-        // Update state dalam satu operasi
-        setFinancialData({
-          income: { jumlah: totalIncome },
-          expenses: {
-            jumlah: expensesResult?.total || 0,
-            limit: limits.expenses,
+        updateFinancialData(
+          {
+            income: totalIncome,
+            expenses: expensesResult?.total || 0,
+            savings: savingsResult?.total || 0,
+            investments: investmentsResult?.total || 0,
           },
-          savings: {
-            jumlah: savingsResult?.total || 0,
-            limit: limits.savings,
-          },
-          investments: {
-            jumlah: investmentsResult?.total || 0,
-            limit: limits.investments,
-          },
-        });
-
-        // Increment version untuk memaksa re-render
-        setDataVersion(prev => prev + 1);
+          limits
+        );
       } catch (error) {
         handleError(error, ERROR_MESSAGES.FETCH_INCOME);
       } finally {
         setLoading(false);
       }
     },
-    [fetchFinancialCategory, calculateLimits, handleError, profileRisk]
+    [
+      fetchFinancialCategory,
+      calculateLimits,
+      handleError,
+      profileRisk,
+      updateFinancialData,
+    ]
   );
 
   // Generic data fetcher with sorting
@@ -239,9 +223,8 @@ export const useFinancialData = () => {
     try {
       const res = await api.get(path);
       if (!res) return [];
-
       return [...res].sort((a, b) => new Date(a.date) - new Date(b.date));
-    } catch (error) {
+    } catch {
       toast.error(`Gagal memuat data ${name}`, TOAST_CONFIG);
       return [];
     }
@@ -252,13 +235,13 @@ export const useFinancialData = () => {
     try {
       const res = await api.get(`${path}/${id}`);
       return res || {};
-    } catch (error) {
+    } catch {
       toast.error(`Gagal memuat data ${name}`, TOAST_CONFIG);
       return {};
     }
   }, []);
 
-  // Generic update function
+  // Update function
   const updateData = useCallback(async ({ path, id, body, name, tipe }) => {
     try {
       const res = await api.put(`${path}/${id}`, body);
@@ -269,19 +252,19 @@ export const useFinancialData = () => {
         TOAST_CONFIG
       );
       return res;
-    } catch (error) {
+    } catch {
       toast.error(`${ERROR_MESSAGES.UPDATE_DATA} ${name}`, TOAST_CONFIG);
-      throw error;
+      throw new Error(ERROR_MESSAGES.UPDATE_DATA);
     }
   }, []);
 
-  // Generic delete function
+  // Delete function
   const deleteData = useCallback(async ({ path, id, name }) => {
     try {
       await api.delete(`${path}/${id}`);
       toast.success("Berhasil menghapus data", TOAST_CONFIG);
       return true;
-    } catch (error) {
+    } catch {
       toast.error(
         `${ERROR_MESSAGES.DELETE_DATA} ${name}. Mohon coba lagi`,
         TOAST_CONFIG
@@ -290,22 +273,21 @@ export const useFinancialData = () => {
     }
   }, []);
 
-  // Post functions with optimistic updates
+  // Post functions
   const postIncome = useCallback(
     async (incomeAmount, source) => {
       const result = await apiCall(
         () =>
           api.post(ENDPOINTS.INCOME, {
             income: incomeAmount,
-            source: source,
+            source,
             date: new Date().toISOString(),
           }),
         ERROR_MESSAGES.POST_INCOME
       );
-
       if (result) {
         toast.success("Pemasukan berhasil ditambahkan!", TOAST_CONFIG);
-        await getIncome(); // Refresh all data
+        await getIncome();
         return true;
       }
       return false;
@@ -319,22 +301,16 @@ export const useFinancialData = () => {
         () =>
           api.post(ENDPOINTS.EXPENSES, {
             expenses: amount,
-            category: category,
+            category,
             date: new Date().toISOString(),
           }),
         ERROR_MESSAGES.POST_EXPENSE
       );
-
       if (result) {
-        // Optimistic update
         setFinancialData(prev => ({
           ...prev,
-          expenses: {
-            ...prev.expenses,
-            jumlah: prev.expenses.jumlah + amount,
-          },
+          expenses: { ...prev.expenses, jumlah: prev.expenses.jumlah + amount },
         }));
-
         toast.success(
           `Pengeluaran Rp. ${amount.toLocaleString(
             "id-ID"
@@ -354,22 +330,16 @@ export const useFinancialData = () => {
         () =>
           api.post(ENDPOINTS.SAVINGS, {
             savings: amount,
-            goal: goal,
+            goal,
             date: new Date().toISOString(),
           }),
         ERROR_MESSAGES.POST_SAVINGS
       );
-
       if (result) {
-        // Optimistic update
         setFinancialData(prev => ({
           ...prev,
-          savings: {
-            ...prev.savings,
-            jumlah: prev.savings.jumlah + amount,
-          },
+          savings: { ...prev.savings, jumlah: prev.savings.jumlah + amount },
         }));
-
         toast.success(
           `Tabungan Rp. ${amount.toLocaleString(
             "id-ID"
@@ -389,14 +359,12 @@ export const useFinancialData = () => {
         () =>
           api.post(ENDPOINTS.INVESTMENTS, {
             investments: amount,
-            instrument: instrument,
+            instrument,
             date: new Date().toISOString(),
           }),
         ERROR_MESSAGES.POST_INVESTMENT
       );
-
       if (result) {
-        // Optimistic update
         setFinancialData(prev => ({
           ...prev,
           investments: {
@@ -404,7 +372,6 @@ export const useFinancialData = () => {
             jumlah: prev.investments.jumlah + amount,
           },
         }));
-
         toast.success(
           `Investasi Rp. ${amount.toLocaleString(
             "id-ID"
@@ -417,34 +384,25 @@ export const useFinancialData = () => {
     },
     [apiCall]
   );
-  const needsUpdate = useRef(false);
-  const cachedProfileRisk = useMemo(() => profileRisk, [profileRisk]);
 
+  // Profile Risk
   const getProfilResiko = useCallback(
     async (forceUpdate = false) => {
-      // Jika tidak dipaksa update dan sudah ada cache, gunakan cache
-      if (!forceUpdate && cachedProfileRisk && !needsUpdate.current) {
-        return cachedProfileRisk;
-      }
-
+      if (!forceUpdate && profileRisk && !needsUpdate.current)
+        return profileRisk;
       try {
         const res = await api.get(ENDPOINTS.PROFILE_RISK);
-        if (!res || res.length === 0) {
-          setProfileRisk({});
-          return {};
-        }
-
-        const response = res[0];
+        const response = res && res.length > 0 ? res[0] : {};
         setProfileRisk(response);
         needsUpdate.current = false;
         return response;
-      } catch (error) {
+      } catch {
         toast.error("Gagal memuat data profile resiko", TOAST_CONFIG);
         setProfileRisk({});
         return {};
       }
     },
-    [cachedProfileRisk]
+    [profileRisk]
   );
 
   const postProfileRisk = useCallback(
@@ -457,7 +415,6 @@ export const useFinancialData = () => {
           savingsLimit,
           investmentsLimit,
         });
-
         if (result) {
           setProfileRisk(result);
           needsUpdate.current = true;
@@ -465,15 +422,14 @@ export const useFinancialData = () => {
           return result;
         }
         return null;
-      } catch (error) {
+      } catch {
         toast.error(ERROR_MESSAGES.POST_PROFILE_RISK, TOAST_CONFIG);
-        throw error;
+        throw new Error(ERROR_MESSAGES.POST_PROFILE_RISK);
       }
     },
     []
   );
 
-  // Dalam fungsi updateProfileRisk
   const updateProfileRisk = useCallback(
     async ({
       id,
@@ -491,7 +447,6 @@ export const useFinancialData = () => {
           savingsLimit,
           investmentsLimit,
         });
-
         if (result) {
           setProfileRisk(result);
           needsUpdate.current = true;
@@ -499,45 +454,37 @@ export const useFinancialData = () => {
           return result;
         }
         return null;
-      } catch (error) {
+      } catch {
         toast.error(ERROR_MESSAGES.PUT_PROFILE_RISK, TOAST_CONFIG);
-        throw error;
+        throw new Error(ERROR_MESSAGES.PUT_PROFILE_RISK);
       }
     },
     []
   );
 
   const refreshData = useCallback(async () => {
-    try {
-      // Hanya ambil profile risk baru jika memang perlu update
-      if (needsUpdate.current) {
-        const updatedProfileRisk = await getProfilResiko(true);
-        if (updatedProfileRisk) {
-          await getIncome(updatedProfileRisk);
-          setDataVersion(prev => prev + 1);
-        }
+    if (needsUpdate.current) {
+      const updatedProfileRisk = await getProfilResiko(true);
+      if (updatedProfileRisk) {
+        await getIncome(updatedProfileRisk);
+        setDataVersion(v => v + 1);
       }
-    } catch (error) {
-      console.error("Error refreshing data:", error);
     }
   }, [getProfilResiko, getIncome]);
 
+  // Init
   useEffect(() => {
-    const initializeData = async () => {
-      await getProfilResiko();
-    };
-    initializeData();
-  }, [getProfilResiko]);
+    getProfilResiko();
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
-    if (profileRisk !== null) {
-      getIncome();
-    }
-  }, [profileRisk, getIncome]);
+    if (profileRisk !== null) getIncome();
+    // eslint-disable-next-line
+  }, [profileRisk]);
 
-  // Return hook interface
+  // Result
   return {
-    // State
     income: financialData.income,
     expensesState: financialData.expenses,
     savingsState: financialData.savings,
@@ -549,8 +496,6 @@ export const useFinancialData = () => {
     error,
     dataVersion,
     setDataVersion,
-
-    // Actions
     getIncome,
     postIncome,
     postExpense,
@@ -560,15 +505,11 @@ export const useFinancialData = () => {
     getProfilResiko,
     postProfileRisk,
     updateProfileRisk,
-
-    // Utilities
     getAllFinancialData,
     getData,
     getDetailData,
     updateData,
     deleteData,
-
-    // Config (deprecated, keep for backward compatibility)
     toastConfig: TOAST_CONFIG,
   };
 };

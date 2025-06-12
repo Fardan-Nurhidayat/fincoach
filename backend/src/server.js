@@ -9,7 +9,7 @@ import riskProfileRoutes from "./routes/riskProfileRoutes.js";
 
 const init = async () => {
   const server = Hapi.server({
-    port: 3001,
+    port: 3000,
     host: "localhost",
     routes: {
       cors: {

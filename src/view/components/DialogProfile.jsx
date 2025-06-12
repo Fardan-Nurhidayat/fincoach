@@ -13,15 +13,15 @@ import {
 import { Input } from "@/view/components/ui/input";
 import { Label } from "@/view/components/ui/label";
 import { useFinancialData } from "@/hooks/useFinancialData";
+import { Loader2 } from "lucide-react"; // Import loading spinner
 
-// Fungsi untuk menentukan nama profil resiko
+// Helper functions remain the same
 function getProfileRiskName(investmentsLimit) {
   if (investmentsLimit <= 20) return "Rendah";
   if (investmentsLimit <= 50) return "Moderate";
   return "Tinggi";
 }
 
-// Fungsi helper untuk deskripsi profil
 function getProfileDescription(name) {
   const descriptions = {
     Rendah:
@@ -35,7 +35,13 @@ function getProfileDescription(name) {
 }
 
 export default function DialogProfile({ profilResiko, refreshData }) {
+  // States
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [loadingState, setLoadingState] = useState({
+    submit: false,
+    saving: false,
+    refreshing: false,
+  });
   const { postProfileRisk, updateProfileRisk } = useFinancialData();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
@@ -46,7 +52,7 @@ export default function DialogProfile({ profilResiko, refreshData }) {
   const [error, setError] = useState(null);
   const [isFormInitialized, setIsFormInitialized] = useState(false);
 
-  // Inisialisasi form dengan data yang ada - hanya saat dialog dibuka
+  // Form initialization effect
   useEffect(() => {
     if (open && !isFormInitialized) {
       if (profilResiko && Object.keys(profilResiko).length > 0) {
@@ -56,7 +62,6 @@ export default function DialogProfile({ profilResiko, refreshData }) {
           investmentsLimit: profilResiko.investmentsLimit?.toString() || "",
         });
       } else {
-        // Reset form untuk profil baru
         setForm({
           expensesLimit: "",
           savingsLimit: "",
@@ -67,15 +72,20 @@ export default function DialogProfile({ profilResiko, refreshData }) {
     }
   }, [open, profilResiko, isFormInitialized]);
 
-  // Reset state ketika dialog ditutup
+  // Dialog close effect
   useEffect(() => {
     if (!open) {
       setIsFormInitialized(false);
       setError(null);
+      setLoadingState({
+        submit: false,
+        saving: false,
+        refreshing: false,
+      });
     }
   }, [open]);
 
-  // Handler untuk perubahan input
+  // Form change handler
   const handleChange = useCallback(
     e => {
       const { name, value } = e.target;
@@ -83,16 +93,12 @@ export default function DialogProfile({ profilResiko, refreshData }) {
         ...prev,
         [name]: value,
       }));
-
-      // Clear error ketika user mulai mengetik
-      if (error) {
-        setError(null);
-      }
+      if (error) setError(null);
     },
     [error]
   );
 
-  // Validasi form
+  // Form validation
   const validateForm = useCallback(
     (expensesLimit, savingsLimit, investmentsLimit) => {
       if (
@@ -121,18 +127,19 @@ export default function DialogProfile({ profilResiko, refreshData }) {
     []
   );
 
+  // Submit handler with loading states
   const submitHandler = async e => {
     e.preventDefault();
     setError(null);
-    setLoadingSubmit(true);
+    setLoadingState(prev => ({ ...prev, submit: true }));
+
     try {
       const formData = new FormData(e.target);
-
       const expensesLimit = parseInt(formData.get("expensesLimit")) || 0;
       const savingsLimit = parseInt(formData.get("savingsLimit")) || 0;
       const investmentsLimit = parseInt(formData.get("investmentsLimit")) || 0;
 
-      // Validasi form
+      // Validation
       const validationError = validateForm(
         expensesLimit,
         savingsLimit,
@@ -146,8 +153,9 @@ export default function DialogProfile({ profilResiko, refreshData }) {
       const name = getProfileRiskName(investmentsLimit);
       const desc = getProfileDescription(name);
 
+      setLoadingState(prev => ({ ...prev, saving: true }));
+
       let updatedProfile;
-      // Update jika sudah ada profil, create jika belum
       if (profilResiko && profilResiko.id) {
         updatedProfile = await updateProfileRisk({
           id: profilResiko.id,
@@ -168,10 +176,9 @@ export default function DialogProfile({ profilResiko, refreshData }) {
       }
 
       if (updatedProfile) {
+        setLoadingState(prev => ({ ...prev, refreshing: true }));
         await refreshData();
         setOpen(false);
-
-        // Reset form setelah berhasil
         setForm({
           expensesLimit: "",
           savingsLimit: "",
@@ -183,15 +190,28 @@ export default function DialogProfile({ profilResiko, refreshData }) {
       console.error("Error saving profile:", error);
       setError("Terjadi kesalahan saat menyimpan profil. Silakan coba lagi.");
     } finally {
-      setLoadingSubmit(false);
+      setLoadingState({
+        submit: false,
+        saving: false,
+        refreshing: false,
+      });
+      window.location.reload();
     }
   };
 
-  // Hitung total saat ini untuk feedback real-time
+  // Calculate current total
   const currentTotal =
     (parseInt(form.expensesLimit) || 0) +
     (parseInt(form.savingsLimit) || 0) +
     (parseInt(form.investmentsLimit) || 0);
+
+  const isLoading =
+    loadingState.submit || loadingState.saving || loadingState.refreshing;
+  const loadingText = loadingState.refreshing
+    ? "Memperbarui data..."
+    : loadingState.saving
+    ? "Menyimpan..."
+    : "Memproses...";
 
   return (
     <Dialog
@@ -295,14 +315,22 @@ export default function DialogProfile({ profilResiko, refreshData }) {
               <Button
                 variant='outline'
                 type='button'
-                disabled={loadingSubmit}>
+                disabled={isLoading}>
                 Batal
               </Button>
             </DialogClose>
             <Button
               type='submit'
-              disabled={loadingSubmit || currentTotal !== 100}>
-              {loadingSubmit ? "Menyimpan..." : "Simpan Profil"}
+              disabled={isLoading || currentTotal !== 100}
+              className='relative'>
+              {isLoading ? (
+                <>
+                  <Loader2 className='h-4 w-4 animate-spin mr-2' />
+                  {loadingText}
+                </>
+              ) : (
+                "Simpan Profil"
+              )}
             </Button>
           </DialogFooter>
         </form>
