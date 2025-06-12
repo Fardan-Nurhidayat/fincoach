@@ -11,76 +11,81 @@ import Investasi from "./view/pages/Investasi";
 import SahamPerusahaan from "./view/pages/SahamPerusahaan";
 import Tabungan from "./view/pages/Tabungan";
 import Pemasukan from "./view/pages/Pemasukan";
-
+import ConditionalRoute from "./view/components/ConditionalRoute";
+import { isMaintenance } from "@/utils/config";
 const App = () => (
   <BrowserRouter>
-    <Routes>
-      {/* Rute Publik */}
-      <Route
-        path='/'
-        element={<Welcome />}
-      />
-      <Route
-        path='/login'
-        element={<LoginForm />}
-      />
-      <Route
-        path='/register'
-        element={<RegisterForm />}
-      />
-      <Route
-        path='/maintenance'
-        element={<MaintenancePage />}
-      />
-      {/* Rute Terproteksi */}
-      <Route
-        path='/dashboard'
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path='/pemasukan'
-        element={
-          <ProtectedRoute>
-            <Pemasukan />
-          </ProtectedRoute>
-        }></Route>
-      <Route
-        path='/pengeluaran'
-        element={
-          <ProtectedRoute>
-            <Pengeluaran />
-          </ProtectedRoute>
-        }></Route>
-      <Route
-        path='/investasi'
-        element={
-          <ProtectedRoute>
-            <Investasi />
-          </ProtectedRoute>
-        }
-      />
+    <ConditionalRoute>
+      <Routes>
+        {/* Rute Publik */}
+        <Route
+          path='/'
+          element={<Welcome />}
+        />
+        <Route
+          path='/login'
+          element={<LoginForm />}
+        />
+        <Route
+          path='/register'
+          element={<RegisterForm />}
+        />
+        <Route
+          path='/maintenance'
+          element={<MaintenancePage />}
+        />
 
-      <Route
-        path='/saham-perusahaan'
-        element={
-          <ProtectedRoute>
-            <SahamPerusahaan />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path='/tabungan'
-        element={
-          <ProtectedRoute>
-            <Tabungan />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+        {/* Rute Terproteksi */}
+        <Route
+          path='/dashboard'
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/pemasukan'
+          element={
+            <ProtectedRoute>
+              <Pemasukan />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/pengeluaran'
+          element={
+            <ProtectedRoute>
+              <Pengeluaran />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/investasi'
+          element={
+            <ProtectedRoute>
+              <Investasi />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/saham-perusahaan'
+          element={
+            <ProtectedRoute>
+              <SahamPerusahaan />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/tabungan'
+          element={
+            <ProtectedRoute>
+              <Tabungan />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </ConditionalRoute>
   </BrowserRouter>
 );
 
