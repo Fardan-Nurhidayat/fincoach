@@ -85,6 +85,7 @@ git push -u origin <nama-branch>
 - [Fardan Nurhidayat](https://github.com/Fardan-Nurhidayat)
 - [Nafis Watsiq](https://github.com/nafiswatsiq)
 - Puput
+- [Wilbert Neilson Sachio](https://github.com/WilbertNeilsonSachio)
 
 ## 🔗 Repository
 
