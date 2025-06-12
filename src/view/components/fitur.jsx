@@ -47,17 +47,6 @@ const fiturList = [
     ),
   },
   {
-    title: "Financial Literacy Module",
-    desc: "Tips harian, kuis, dan artikel edukatif untuk meningkatkan literasi finansial pengguna.",
-    icon: (
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
-      />
-    ),
-  },
-  {
     title: "AI-Driven Insights",
     desc: "Menggunakan model sederhana (TensorFlow) untuk mendukung keputusan keuangan pengguna.",
     icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
@@ -65,6 +54,8 @@ const fiturList = [
 ];
 
 export default function Fitur() {
+  const firstRow = fiturList.slice(0, 3);
+  const secondRow = fiturList.slice(3);
 
   return (
     <section
@@ -87,42 +78,60 @@ export default function Fitur() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="hidden lg:grid grid-cols-3 gap-8 justify-center w-full mb-8">
+          {firstRow.map((fitur, idx) => (
+            <FeatureCard key={idx} fitur={fitur} index={idx} />
+          ))}
+        </div>
+
+        <div className="hidden md:grid grid-cols-2 gap-8 w-full justify-center  max-w-4xl mx-auto mb-8">
+          {secondRow.map((fitur, idx) => (
+            <FeatureCard key={idx} fitur={fitur} index={idx + 3} />
+          ))}
+        </div>
+
+        <div className="grid md:hidden grid-cols-1 gap-8 w-full">
           {fiturList.map((fitur, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 + idx * 0.1 }}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0px 12px 24px rgba(0,0,0,0.15)",
-                transition: {
-                  scale: { duration: 0.2 },
-                  boxShadow: { duration: 0.3 },
-                },
-              }}
-              className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm transition-all duration-300 ease-in-out"
-            >
-              <div className="w-12 h-12 inline-flex items-center justify-center rounded-lg bg-gray-100 text-purple-400 mb-5">
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  className="w-7 h-7"
-                >
-                  {fitur.icon}
-                </svg>
-              </div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                {fitur.title}
-              </h2>
-              <p className="leading-relaxed text-gray-600">{fitur.desc}</p>
-            </motion.div>
+            <FeatureCard key={idx} fitur={fitur} index={idx} />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+// Komponen FeatureCard terpisah agar reusable
+function FeatureCard({ fitur, index }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+      whileHover={{
+        scale: 1.02,
+        boxShadow: "0px 12px 24px rgba(0,0,0,0.15)",
+        transition: {
+          scale: { duration: 0.2 },
+          boxShadow: { duration: 0.3 },
+        },
+      }}
+      className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm transition-all duration-300 ease-in-out"
+    >
+      <div className="w-12 h-12 inline-flex items-center justify-center rounded-lg bg-gray-100 text-purple-400 mb-5">
+        <svg
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          className="w-7 h-7"
+        >
+          {fitur.icon}
+        </svg>
+      </div>
+      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+        {fitur.title}
+      </h2>
+      <p className="leading-relaxed text-gray-600">{fitur.desc}</p>
+    </motion.div>
   );
 }
