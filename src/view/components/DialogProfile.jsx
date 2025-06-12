@@ -44,17 +44,36 @@ export default function DialogProfile({ profilResiko, refreshData }) {
     investmentsLimit: "",
   });
   const [error, setError] = useState(null);
+  const [isFormInitialized, setIsFormInitialized] = useState(false);
 
-  // Inisialisasi form dengan data yang ada
+  // Inisialisasi form dengan data yang ada - hanya saat dialog dibuka
   useEffect(() => {
-    if (profilResiko && Object.keys(profilResiko).length > 0) {
-      setForm({
-        expensesLimit: profilResiko.expensesLimit?.toString() || "",
-        savingsLimit: profilResiko.savingsLimit?.toString() || "",
-        investmentsLimit: profilResiko.investmentsLimit?.toString() || "",
-      });
+    if (open && !isFormInitialized) {
+      if (profilResiko && Object.keys(profilResiko).length > 0) {
+        setForm({
+          expensesLimit: profilResiko.expensesLimit?.toString() || "",
+          savingsLimit: profilResiko.savingsLimit?.toString() || "",
+          investmentsLimit: profilResiko.investmentsLimit?.toString() || "",
+        });
+      } else {
+        // Reset form untuk profil baru
+        setForm({
+          expensesLimit: "",
+          savingsLimit: "",
+          investmentsLimit: "",
+        });
+      }
+      setIsFormInitialized(true);
     }
-  }, [profilResiko]);
+  }, [open, profilResiko, isFormInitialized]);
+
+  // Reset state ketika dialog ditutup
+  useEffect(() => {
+    if (!open) {
+      setIsFormInitialized(false);
+      setError(null);
+    }
+  }, [open]);
 
   // Handler untuk perubahan input
   const handleChange = useCallback(
@@ -127,9 +146,10 @@ export default function DialogProfile({ profilResiko, refreshData }) {
       const name = getProfileRiskName(investmentsLimit);
       const desc = getProfileDescription(name);
 
+      let updatedProfile;
       // Update jika sudah ada profil, create jika belum
       if (profilResiko && profilResiko.id) {
-        await updateProfileRisk({
+        updatedProfile = await updateProfileRisk({
           id: profilResiko.id,
           name,
           desc,
@@ -138,7 +158,7 @@ export default function DialogProfile({ profilResiko, refreshData }) {
           investmentsLimit,
         });
       } else {
-        await postProfileRisk({
+        updatedProfile = await postProfileRisk({
           name,
           desc,
           expensesLimit,
@@ -146,16 +166,19 @@ export default function DialogProfile({ profilResiko, refreshData }) {
           investmentsLimit,
         });
       }
-      await refreshData();
-      setOpen(false);
 
-      // Reset form setelah berhasil
-      setForm({
-        expensesLimit: "",
-        savingsLimit: "",
-        investmentsLimit: "",
-      });
-      // Refresh data dan tutup dialog
+      if (updatedProfile) {
+        await refreshData();
+        setOpen(false);
+
+        // Reset form setelah berhasil
+        setForm({
+          expensesLimit: "",
+          savingsLimit: "",
+          investmentsLimit: "",
+        });
+        setIsFormInitialized(false);
+      }
     } catch (error) {
       console.error("Error saving profile:", error);
       setError("Terjadi kesalahan saat menyimpan profil. Silakan coba lagi.");

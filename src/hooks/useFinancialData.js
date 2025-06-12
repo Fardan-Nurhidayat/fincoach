@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { api } from "@/utils/api.js";
 import { toast } from "react-toastify";
 
@@ -417,55 +417,63 @@ export const useFinancialData = () => {
     },
     [apiCall]
   );
+  const needsUpdate = useRef(false);
+  const cachedProfileRisk = useMemo(() => profileRisk, [profileRisk]);
 
-  const getProfilResiko = useCallback(async () => {
-    try {
-      const res = await api.get(ENDPOINTS.PROFILE_RISK);
-      // Handle jika response kosong atau tidak ada data
-      if (!res || res.length === 0) {
-        setProfileRisk({}); // Set ke objek kosong untuk menandakan tidak ada data
-        return {};
+  const getProfilResiko = useCallback(
+    async (forceUpdate = false) => {
+      // Jika tidak dipaksa update dan sudah ada cache, gunakan cache
+      if (!forceUpdate && cachedProfileRisk && !needsUpdate.current) {
+        return cachedProfileRisk;
       }
 
-      const response = res[0];
-      setProfileRisk(response);
-      return response;
-    } catch (error) {
-      toast.error("Gagal memuat data profile resiko", TOAST_CONFIG);
-      setProfileRisk({}); // Set ke objek kosong saat error
-      return {};
-    }
-  }, []); // Remove dependency untuk menghindari infinite loop
+      try {
+        const res = await api.get(ENDPOINTS.PROFILE_RISK);
+        if (!res || res.length === 0) {
+          setProfileRisk({});
+          return {};
+        }
+
+        const response = res[0];
+        setProfileRisk(response);
+        needsUpdate.current = false;
+        return response;
+      } catch (error) {
+        toast.error("Gagal memuat data profile resiko", TOAST_CONFIG);
+        setProfileRisk({});
+        return {};
+      }
+    },
+    [cachedProfileRisk]
+  );
 
   const postProfileRisk = useCallback(
     async ({ name, desc, expensesLimit, savingsLimit, investmentsLimit }) => {
-      const result = await apiCall(
-        () =>
-          api.post(ENDPOINTS.PROFILE_RISK, {
-            name: name,
-            desc: desc,
-            expensesLimit: expensesLimit,
-            savingsLimit: savingsLimit,
-            investmentsLimit: investmentsLimit,
-          }),
-        ERROR_MESSAGES.POST_PROFILE_RISK
-      );
+      try {
+        const result = await api.post(ENDPOINTS.PROFILE_RISK, {
+          name,
+          desc,
+          expensesLimit,
+          savingsLimit,
+          investmentsLimit,
+        });
 
-      if (result) {
-        // Update profileRisk state terlebih dahulu
-        setProfileRisk(result);
-        toast.success("Berhasil membuat profile resiko", TOAST_CONFIG);
-
-        // Kemudian update financial data dengan profile risk yang baru
-        await getIncome(result);
-
-        return true;
+        if (result) {
+          setProfileRisk(result);
+          needsUpdate.current = true;
+          toast.success("Berhasil membuat profile resiko", TOAST_CONFIG);
+          return result;
+        }
+        return null;
+      } catch (error) {
+        toast.error(ERROR_MESSAGES.POST_PROFILE_RISK, TOAST_CONFIG);
+        throw error;
       }
-      return false;
     },
-    [apiCall, getIncome]
+    []
   );
-  // Tambahkan fungsi updateProfileRisk
+
+  // Dalam fungsi updateProfileRisk
   const updateProfileRisk = useCallback(
     async ({
       id,
@@ -475,39 +483,39 @@ export const useFinancialData = () => {
       savingsLimit,
       investmentsLimit,
     }) => {
-      const result = await apiCall(
-        () =>
-          api.put(`${ENDPOINTS.PROFILE_RISK}/${id}`, {
-            name,
-            desc,
-            expensesLimit,
-            savingsLimit,
-            investmentsLimit,
-          }),
-        ERROR_MESSAGES.PUT_PROFILE_RISK
-      );
+      try {
+        const result = await api.put(`${ENDPOINTS.PROFILE_RISK}/${id}`, {
+          name,
+          desc,
+          expensesLimit,
+          savingsLimit,
+          investmentsLimit,
+        });
 
-      if (result) {
-        // Update profileRisk state terlebih dahulu
-        setProfileRisk(result);
-        toast.success("Berhasil memperbarui profil risiko", TOAST_CONFIG);
-
-        // Kemudian update financial data dengan profile risk yang baru
-        await getIncome(result);
-
-        return true;
+        if (result) {
+          setProfileRisk(result);
+          needsUpdate.current = true;
+          toast.success("Berhasil memperbarui profil risiko", TOAST_CONFIG);
+          return result;
+        }
+        return null;
+      } catch (error) {
+        toast.error(ERROR_MESSAGES.PUT_PROFILE_RISK, TOAST_CONFIG);
+        throw error;
       }
-      return false;
     },
-    [apiCall, getIncome]
+    []
   );
-  // Refresh data function
+
   const refreshData = useCallback(async () => {
     try {
-      const updatedProfileRisk = await getProfilResiko();
-      if (updatedProfileRisk) {
-        await getIncome(updatedProfileRisk);
-        setDataVersion(prev => prev + 1);
+      // Hanya ambil profile risk baru jika memang perlu update
+      if (needsUpdate.current) {
+        const updatedProfileRisk = await getProfilResiko(true);
+        if (updatedProfileRisk) {
+          await getIncome(updatedProfileRisk);
+          setDataVersion(prev => prev + 1);
+        }
       }
     } catch (error) {
       console.error("Error refreshing data:", error);

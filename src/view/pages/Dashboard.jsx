@@ -7,28 +7,21 @@ import { useFinancialData } from "@/hooks/useFinancialData";
 
 export default function Dashboard() {
   const {
-    getProfilResiko,
-    getIncome,
-    profilResiko: initialProfilResiko,
+    expensesState,
+    savingsState,
+    investmentsState,
+    income,
+    sisa,
+    pemakaian,
+    postExpense,
+    postSavings,
+    postInvestment,
+    postIncome,
+    profilResiko,
+    dataVersion,
+    refreshData,
+    toastConfig,
   } = useFinancialData();
-
-  const [profilResiko, setProfilResiko] = useState(null);
-  const [dataVersion, setDataVersion] = useState(0); // trigger rerender
-
-  const refreshData = useCallback(async () => {
-    const updated = await getProfilResiko();
-    setProfilResiko(updated);
-    await getIncome(updated);
-    setDataVersion(prev => prev + 1);
-  }, [getProfilResiko, getIncome]);
-
-  useEffect(() => {
-    refreshData();
-  }, [refreshData]);
-
-  if (!profilResiko) {
-    return <div>Memuat...</div>;
-  }
 
   return (
     <DashboardLayout>
@@ -40,6 +33,17 @@ export default function Dashboard() {
         <CardSection
           profilResiko={profilResiko}
           dataVersion={dataVersion}
+          expensesState={expensesState}
+          savingsState={savingsState}
+          investmentsState={investmentsState}
+          income={income}
+          sisa={sisa}
+          pemakaian={pemakaian}
+          postExpense={postExpense}
+          postSavings={postSavings}
+          postInvestment={postInvestment}
+          postIncome={postIncome}
+          toastConfig={toastConfig}
         />
         <ChartSection />
       </div>

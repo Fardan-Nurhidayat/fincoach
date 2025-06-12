@@ -24,21 +24,21 @@ import { useState, useEffect, memo, useMemo } from "react";
 import { IconPlus } from "@tabler/icons-react";
 import { useFinancialData } from "../../hooks/useFinancialData.js";
 
-export default memo(function CardSection({ profilResiko, dataVersion }) {
-  const {
-    income,
-    expensesState,
-    savingsState,
-    investmentsState,
-    sisa,
-    pemakaian,
-    postIncome,
-    postExpense,
-    postSavings,
-    postInvestment,
-    toastConfig,
-  } = useFinancialData();
-
+export default memo(function CardSection({
+  profilResiko,
+  dataVersion,
+  expensesState,
+  savingsState,
+  investmentsState,
+  income,
+  sisa,
+  pemakaian,
+  postIncome,
+  postExpense,
+  postSavings,
+  postInvestment,
+  toastConfig,
+}) {
   const incomeHandler = async e => {
     e.preventDefault();
     const amount = parseInt(e.target.pemasukan.value, 10);
@@ -114,6 +114,39 @@ export default memo(function CardSection({ profilResiko, dataVersion }) {
     e.target.desc.value = "";
   };
 
+  const data = useMemo(
+    () => [
+      {
+        title: "Pengeluaran",
+        value: expensesState.jumlah || 0,
+        limit: expensesState.limit || 0,
+        color: "red",
+        colorGradient: "from-red-500 to-red-100",
+        iconGradient: "from-red-500 to-orange-500",
+        status: "expense",
+      },
+      {
+        title: "Tabungan",
+        value: savingsState.jumlah || 0,
+        limit: savingsState.limit || 0,
+        color: "blue",
+        iconGradient: "from-blue-500 to-cyan-500",
+        colorGradient: "from-blue-500 to-blue-100",
+        status: "saving",
+      },
+      {
+        title: "Investasi",
+        value: investmentsState.jumlah || 0,
+        limit: investmentsState.limit || 0,
+        color: "emerald",
+        iconGradient: "from-emerald-500 to-green-500",
+        colorGradient: "from-emerald-500 to-emerald-100",
+        status: "investment",
+      },
+    ],
+    [expensesState, savingsState, investmentsState]
+  );
+
   // Loading state yang lebih informatif
   if (profilResiko === null || profilResiko === undefined) {
     return (
@@ -153,36 +186,6 @@ export default memo(function CardSection({ profilResiko, dataVersion }) {
       </div>
     );
   }
-
-  const data = [
-    {
-      title: "Pengeluaran",
-      value: expensesState.jumlah || 0,
-      limit: expensesState.limit || 0,
-      color: "red",
-      colorGradient: "from-red-500 to-red-100",
-      iconGradient: "from-red-500 to-orange-500",
-      status: "expense",
-    },
-    {
-      title: "Tabungan",
-      value: savingsState.jumlah || 0,
-      limit: savingsState.limit || 0,
-      color: "blue",
-      iconGradient: "from-blue-500 to-cyan-500",
-      colorGradient: "from-blue-500 to-blue-100",
-      status: "saving",
-    },
-    {
-      title: "Investasi",
-      value: investmentsState.jumlah || 0,
-      limit: investmentsState.limit || 0,
-      color: "emerald",
-      iconGradient: "from-emerald-500 to-green-500",
-      colorGradient: "from-emerald-500 to-emerald-100",
-      status: "investment",
-    },
-  ];
   return (
     <div
       key={dataVersion} // Gunakan dataVersion sebagai key untuk memaksa re-render

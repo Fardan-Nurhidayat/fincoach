@@ -6,7 +6,7 @@ FinCoach adalah aplikasi berbasis web yang membantu pengguna dalam mengelola keu
 
 - 🔢 **Smart Budget Allocation**: Otomatis membagi pendapatan bulanan tergantung profil resiko dengan membagi menjadi kebutuhan, tabungan, dan investasi.
 - 📈 **Investment Prediction**: Prediksi Harga saham oleh AI.
-- 🧮 **Expense,Savings and Invesments Tracking**: Input pengeluaran , tabungan dan investasi harian
+- 🧮 **Expense,Savings and Investment Tracking**: Input pengeluaran , tabungan dan investasi harian
 - 📊 **Financial Dashboard**: Visualisasi data anggaran dan pengeluaran dalam grafik interaktif.
 - 🧠 **AI-Driven Insights**: Menggunakan model sederhana (TensorFlow) untuk mendukung keputusan investasi pengguna.
 

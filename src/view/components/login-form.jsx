@@ -120,6 +120,14 @@ export function LoginForm({ className, ...props }) {
                       Daftar
                     </Link>
                   </div>
+                  <div className='mt-4 text-center text-sm text-purple-950'>
+                    Kembali ke{" "}
+                    <Link
+                      to='/'
+                      className='underline underline-offset-4'>
+                      Beranda
+                    </Link>
+                  </div>
                 </form>
               </CardContent>
             </Card>

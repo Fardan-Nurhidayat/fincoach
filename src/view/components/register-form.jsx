@@ -12,6 +12,7 @@ import { Label } from "@/view/components/ui/label";
 import { api } from "@/utils/api";
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 export function RegisterForm({ className, ...props }) {
   const navigate = useNavigate();
@@ -20,24 +21,32 @@ export function RegisterForm({ className, ...props }) {
     e.preventDefault();
 
     try {
-      const response = await api.post(
-        "/auth/register",
-        {
-          displayName: e.target.name.value,
-          email: e.target.email.value,
-          password: e.target.password.value,
-      })
-
-      console.log(response);
+      const response = await api.post("/auth/register", {
+        displayName: e.target.name.value,
+        email: e.target.email.value,
+        password: e.target.password.value,
+      });
       if (response) {
-        alert("Pendaftaran berhasil! Silakan masuk.");
+        Swal.fire({
+          title: "Berhasil",
+          text: "Anda sudah berhasil login",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
         navigate("/login");
       } else {
-        alert("Pendaftaran gagal. Silakan coba lagi.");
+        Swal.fire({
+          title: "Gagal",
+          text: "Gagal mendaftar. Silakan coba lagi.",
+          icon: "error",
+        });
       }
     } catch (error) {
-      console.error("Registration failed:", error);
-      alert("Gagal mendaftar. Silakan coba lagi.");
+      Swal.fire({
+        title: "Gagal",
+        text: "Gagal mendaftar. Silakan coba lagi.",
+        icon: "error",
+      });
     }
   };
 
@@ -103,6 +112,14 @@ export function RegisterForm({ className, ...props }) {
                       aria-label='Masuk'
                       className='underline underline-offset-4'>
                       Masuk
+                    </Link>
+                  </div>
+                  <div className='text-center text-sm text-purple-950'>
+                    Kembali ke{" "}
+                    <Link
+                      to='/'
+                      className='underline underline-offset-4'>
+                      Beranda
                     </Link>
                   </div>
                 </form>

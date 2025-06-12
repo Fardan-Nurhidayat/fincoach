@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/view/components/ui/button";
 import { Component } from "./Chart";
 // Icons
@@ -49,12 +49,16 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 1 }}
           className='relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4'>
-          <button className='w-60 cursor-pointer transform rounded-lg bg-purple-600 px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-700'>
+          <a
+            href='#simulasi'
+            className='w-60 text-center cursor-pointer transform rounded-lg bg-purple-600 px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-700'>
             Coba Sekarang
-          </button>
-          <button className='w-60 cursor-pointer transform rounded-lg border border-purple-600 bg-white px-6 py-2 font-medium text-purple-600 transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-600 hover:text-white'>
+          </a>
+          <a
+            href='#kontak'
+            className='w-60 text-center cursor-pointer transform rounded-lg border border-purple-600 bg-white px-6 py-2 font-medium text-purple-600 transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-600 hover:text-white'>
             Hubungi Kami
-          </button>
+          </a>
         </motion.div>
       </div>
       <Stats />
@@ -64,26 +68,132 @@ export default function Hero() {
 }
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close menu on navigation (for mobile UX)
+  const closeMenu = () => setIsOpen(false);
+
   return (
-    <nav className='relative w-full flex items-center justify-between'>
+    <nav className='relative w-full flex items-center justify-between py-2 px-2 md:px-0'>
       <div className='flex items-center gap-2'>
         <div className='size-7 rounded-full bg-gradient-to-br from-purple-600 to-purple-200' />
-
         <h1 className='text-purple-950 font-bold md:text-2xl'>FinCoach</h1>
       </div>
-      <NavbarMenu />
-      <div className='flex gap-5'>
+
+      {/* Hamburger menu for mobile */}
+      <div className='flex lg:hidden'>
+        <button
+          className='inline-flex items-center justify-center p-2 rounded-md text-purple-700 hover:text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-600'
+          aria-controls='mobile-menu'
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen(!isOpen)}>
+          <svg
+            className={`h-6 w-6 transition-transform ${
+              isOpen ? "rotate-90" : ""
+            }`}
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            stroke='currentColor'>
+            {isOpen ? (
+              // X icon
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M6 18L18 6M6 6l12 12'
+              />
+            ) : (
+              // Hamburger icon
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M4 6h16M4 12h16M4 18h16'
+              />
+            )}
+          </svg>
+        </button>
+      </div>
+
+      {/* NavbarMenu for desktop */}
+      <div className='hidden lg:flex'>
+        <NavbarMenu />
+      </div>
+
+      {/* Auth buttons for desktop */}
+      <div className='hidden lg:flex gap-5'>
         <Link
           to='/login'
-          className='w-12 md:w-32 text-center cursor-pointer transform rounded-lg bg-purple-600 px-2 py-1 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-700'>
+          className='w-12 lg:w-32 text-center cursor-pointer transform rounded-lg bg-purple-600 px-2 py-1 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-700'>
           Masuk
         </Link>
         <Link
           to='/register'
-          className='w-12 md:w-32 text-center cursor-pointer transform rounded-lg border border-purple-600 bg-white px-2 py-1 font-medium text-purple-600 transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-600 hover:text-white'>
+          className='w-12 lg:w-32 text-center cursor-pointer transform rounded-lg border border-purple-600 bg-white px-2 py-1 font-medium text-purple-600 transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-600 hover:text-white'>
           Daftar
         </Link>
       </div>
+
+      {/* Mobile menu */}
+      {isOpen && (
+        <div className='absolute top-full left-0 w-full bg-white shadow-md z-50 lg:hidden animate-fade-in'>
+          <ul className='flex flex-col px-4 py-3 gap-4'>
+            <li>
+              <a
+                href='#'
+                aria-label='Beranda'
+                className='block py-2 px-2 text-[18px] rounded-lg focus:border focus:ring-purple-400 text-purple-900 hover:bg-purple-100'
+                onClick={closeMenu}>
+                Beranda
+              </a>
+            </li>
+            <li>
+              <a
+                href='#fitur'
+                aria-label='Fitur'
+                className='block py-2 px-2 text-[18px] rounded-lg focus:border focus:ring-purple-400 text-purple-900 hover:bg-purple-100'
+                onClick={closeMenu}>
+                Fitur
+              </a>
+            </li>
+            <li>
+              <a
+                href='#simulasi'
+                aria-label='Simulasi'
+                className='block py-2 px-2 text-[18px] rounded-lg focus:border focus:ring-purple-400 text-purple-900 hover:bg-purple-100'
+                onClick={closeMenu}>
+                Simulasi
+              </a>
+            </li>
+            <li>
+              <a
+                href='#kontak'
+                aria-label='Kontak'
+                className='block py-2 px-2 text-[18px] rounded-lg focus:border focus:ring-purple-400 text-purple-900 hover:bg-purple-100'
+                onClick={closeMenu}>
+                Kontak
+              </a>
+            </li>
+            <li>
+              <Link
+                to='/login'
+                className='block w-full text-center cursor-pointer rounded-lg bg-purple-600 px-2 py-2 font-medium text-white mt-2 transition-all duration-300 hover:bg-purple-700'
+                onClick={closeMenu}>
+                Masuk
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/register'
+                className='block w-full text-center cursor-pointer rounded-lg border border-purple-600 bg-white px-2 py-2 font-medium text-purple-600 mt-1 transition-all duration-300 hover:bg-purple-600 hover:text-white'
+                onClick={closeMenu}>
+                Daftar
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };
@@ -97,14 +207,6 @@ const NavbarMenu = () => {
           className='text-[18px] focus:p-1 rounded-lg focus:border focus:ring-purple-400'
           href='#'>
           Beranda
-        </a>
-      </li>
-      <li>
-        <a
-          aria-label='Tentang Kami'
-          className='text-[18px] focus:p-1 rounded-lg focus:border focus:ring-purple-400'
-          href='#tentangKami'>
-          Tentang Kami
         </a>
       </li>
       <li>

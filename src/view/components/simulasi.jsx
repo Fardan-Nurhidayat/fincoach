@@ -49,57 +49,61 @@ const Simulasi = () => {
   ];
 
   return (
-    <div className="bg-gradient-to-b from-white to-purple-50 py-16">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div
+      id='simulasi'
+      className='bg-gradient-to-b from-white to-purple-50 py-16'>
+      <div className='container mx-auto px-4 max-w-6xl'>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex flex-col items-center text-center mb-16"
-        >
-          <h1 className="text-3xl font-bold text-center mb-8 text-gray-900">
+          className='flex flex-col items-center text-center mb-16'>
+          <h1 className='text-3xl font-bold text-center mb-8 text-gray-900'>
             Simulasi Keuangan Bulanan
           </h1>
-          <p className="text-lg text-center mb-12 text-gray-600">
+          <p className='text-lg text-center mb-12 text-gray-600'>
             Masukkan pemasukan bulanan untuk melihat alokasi keuangan Anda.
           </p>
         </motion.div>
 
-        <div className="flex flex-col md:flex-row gap-8 items-start">
+        <div className='flex flex-col md:flex-row gap-8 items-start'>
           {/* Form Input */}
-          <div className="md:w-1/2 w-full bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">Masukkan Pemasukan</h2>
-            <div className="mb-4">
-              <label htmlFor="income" className="block font-medium mb-2">
+          <div className='md:w-1/2 w-full bg-white p-6 rounded-lg shadow-md'>
+            <h2 className='text-xl font-semibold mb-4'>Masukkan Pemasukan</h2>
+            <div className='mb-4'>
+              <label
+                htmlFor='income'
+                className='block font-medium mb-2'>
                 Pemasukan Bulanan
               </label>
               <input
-                id="income"
-                type="number"
-                min="0"
+                id='income'
+                type='number'
+                min='0'
                 value={monthlyIncome}
-                onChange={(e) => setMonthlyIncome(Number(e.target.value))}
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:border-purple-500 transition duration-300"
+                onChange={e => setMonthlyIncome(Number(e.target.value))}
+                className='w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:border-purple-500 transition duration-300'
               />
             </div>
 
-            <div className="mb-4">
-              <label htmlFor="riskProfile" className="block font-medium mb-2">
+            <div className='mb-4'>
+              <label
+                htmlFor='riskProfile'
+                className='block font-medium mb-2'>
                 Profil Risiko
               </label>
               <select
-                id="riskProfile"
+                id='riskProfile'
                 value={riskProfile}
-                onChange={(e) => setRiskProfile(e.target.value)}
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:border-purple-500 transition duration-300"
-              >
-                <option value="low">
+                onChange={e => setRiskProfile(e.target.value)}
+                className='w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:border-purple-500 transition duration-300'>
+                <option value='low'>
                   Rendah (50% Pengeluaran, 30% Tabungan, 20% Investasi)
                 </option>
-                <option value="medium">
+                <option value='medium'>
                   Sedang (50% Pengeluaran, 20% Tabungan, 30% Investasi)
                 </option>
-                <option value="high">
+                <option value='high'>
                   Tinggi (40% Pengeluaran, 20% Tabungan, 40% Investasi)
                 </option>
               </select>
@@ -107,17 +111,20 @@ const Simulasi = () => {
 
             <button
               onClick={simulate}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-md transition duration-300"
-            >
+              className='w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-md transition duration-300'>
               Simulasikan
             </button>
           </div>
 
           {/* Hasil Simulasi */}
           {showResults && (
-            <div className="md:w-3/4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className='md:w-3/4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
               {simulationCards.map((item, index) => (
-                <SimulationCard key={index} item={item} index={index} />
+                <SimulationCard
+                  key={index}
+                  item={item}
+                  index={index}
+                />
               ))}
             </div>
           )}
@@ -163,12 +170,11 @@ const SimulationCard = ({ item, index }) => {
         damping: 15,
         delay: 0.1 + index * 0.1,
       }}
-      className={`${selectedColor.bg} border ${selectedColor.border} p-5 rounded-lg shadow-sm hover:shadow-lg transition duration-300`}
-    >
+      className={`${selectedColor.bg} border ${selectedColor.border} p-5 rounded-lg shadow-sm hover:shadow-lg transition duration-300`}>
       <h2 className={`font-semibold text-xl ${selectedColor.textMain} mb-4`}>
         {item.title}
       </h2>
-      <p className="text-gray-600 mb-2">
+      <p className='text-gray-600 mb-2'>
         {item.description}
         <span className={`font-bold ${selectedColor.textBold}`}>
           {" "}
