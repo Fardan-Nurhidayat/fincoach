@@ -9,6 +9,7 @@ const ConditionalRoute = ({ children }) => {
   const allowedPaths = ["/", "/maintenance"];
 
   if (isMaintenance && !allowedPaths.includes(location.pathname)) {
+    localStorage.removeItem("fincoach_token");
     return (
       <Navigate
         to='/maintenance'

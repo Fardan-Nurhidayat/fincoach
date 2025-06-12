@@ -35,7 +35,7 @@ export default function MaintenancePage() {
         <div className='mt-6'>
           <Link
             to='/'
-            className='inline-flex items-center px-4 py-2 cursor-pointer border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-400 hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150'>
+            className='inline-flex items-center px-4 py-2 cursor-pointer border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-400 hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-700 transition duration-150'>
             Kembali ke Halaman Utama
           </Link>
         </div>
