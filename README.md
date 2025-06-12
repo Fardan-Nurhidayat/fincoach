@@ -22,16 +22,20 @@ FinCoach adalah aplikasi berbasis web yang membantu pengguna dalam mengelola keu
 fincoach/
 ├── public/
 ├── src/
-    └── main.js
+    └── App.jsx
+    └── firebase.js
+    └── main.jsx
     ├── assets/
-    ├── sripts/
+    ├── hooks/
+    ├── lib/
+    ├── styles/
+    └── style.css
+    ├── utils/
+    ├── view/
         ├── components/
         ├── pages/
         ├── template/
-        ├── data/
-        ├── utils/
-    ├── styles/
-        └── style.css
+
 ├── eslint.config.js
 ├── index.html
 └── package.json
