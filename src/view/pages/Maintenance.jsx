@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 export default function MaintenancePage() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800'>
@@ -30,18 +31,18 @@ export default function MaintenancePage() {
           Situs sedang dalam perawatan berkala. Mohon tunggu sebentar.
         </p>
 
-        {/* Button */}
+        {/* Link */}
         <div className='mt-6'>
-          <button
-            onClick={() => window.location.reload()}
-            className='inline-flex items-center px-4 py-2 cursor-pointer border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150'>
-            Muat Ulang Halaman
-          </button>
+          <Link
+            to='/'
+            className='inline-flex items-center px-4 py-2 cursor-pointer border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-400 hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150'>
+            Kembali ke Halaman Utama
+          </Link>
         </div>
 
         {/* Footer */}
         <footer className='text-sm text-gray-500 dark:text-gray-400'>
-          © {new Date().getFullYear()} FinCoach. Keep Grow.
+          © {new Date().getFullYear()} FinCoach. Keep Safe & Track.
         </footer>
       </div>
     </div>
