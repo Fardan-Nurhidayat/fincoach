@@ -8,11 +8,12 @@
   },
   "scripts": {
     "dev:frontend": "vite",
-    "start": "nodemon --no-warnings backend/src/server.js",
+    "dev:backend": "nodemon --no-warnings backend/src/server.js",
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node backend/src/server.js"
   },
   "engines": {
     "node": ">=16"
@@ -24,6 +25,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@hapi/boom": "^10.0.1",
     "@hapi/hapi": "^21.4.0",
+    "@hapi/inert": "^7.1.0",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-accordion": "^1.2.10",
     "@radix-ui/react-alert-dialog": "^1.1.13",

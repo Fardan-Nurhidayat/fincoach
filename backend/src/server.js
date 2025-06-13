@@ -6,17 +6,38 @@ import expensesRoutes from "./routes/expensesRoutes.js";
 import savingsRoutes from "./routes/savingsRoutes.js";
 import investmentsRoutes from "./routes/investmentsRoutes.js";
 import riskProfileRoutes from "./routes/riskProfileRoutes.js";
+import dotenv from "dotenv";
+dotenv.config();
+import Path from 'path';
+import Inert from '@hapi/inert';
+import { fileURLToPath } from 'url';
+
+const __dirname = Path.dirname(fileURLToPath(import.meta.url));
 
 const init = async () => {
   const server = Hapi.server({
-    port: 3000,
-    host: "localhost",
+    port: process.env.PORT_BE || 3000,
+    host: process.env.HOST_BE || "localhost",
     routes: {
       cors: {
         origin: ["*"],
         credentials: true,
       },
     },
+  });
+
+  await server.register(Inert);
+
+    // Serve frontend dist folder
+  server.route({
+    method: 'GET',
+    path: '/{param*}',
+    handler: {
+      directory: {
+        path: Path.join(__dirname, '../../dist'),
+        index: ['index.html'],
+      }
+    }
   });
 
   await server.register([
