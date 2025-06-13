@@ -6,8 +6,10 @@ import {
   Filter,
 } from "firebase-admin/firestore";
 
-import serviceAccount from "./serviceAccountKey.json" with { type: "json" };
-
+const serviceAccountBase64 = process.env.SERVICE_ACCOUNT_KEY;
+const serviceAccount = JSON.parse(
+  Buffer.from(serviceAccountBase64, "base64").toString("utf-8")
+);
 initializeApp({
   credential: cert(serviceAccount),
 });
