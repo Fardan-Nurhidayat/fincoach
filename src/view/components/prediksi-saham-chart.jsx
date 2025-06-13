@@ -160,6 +160,8 @@ export default function ChartPrediksiSaham({ symbol }) {
 
   // Filter data berdasarkan time range (sekarang hanya untuk display formatting)
   const getDisplayFormat = useCallback(range => {
+    const inMonth = range.includes("mo");
+    if (inMonth) return "date";
     const isIntraday = range.includes("m") || range.includes("h");
     return isIntraday ? "datetime" : "date";
   }, []);

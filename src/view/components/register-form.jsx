@@ -34,17 +34,11 @@ export function RegisterForm({ className, ...props }) {
           confirmButtonText: "OK",
         });
         navigate("/login");
-      } else {
-        Swal.fire({
-          title: "Gagal",
-          text: "Gagal mendaftar. Silakan coba lagi.",
-          icon: "error",
-        });
       }
     } catch (error) {
       Swal.fire({
         title: "Gagal",
-        text: "Gagal mendaftar. Silakan coba lagi.",
+        text: "Gagal mendaftar. Silakan coba lagi",
         icon: "error",
       });
     }
