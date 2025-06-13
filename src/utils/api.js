@@ -1,4 +1,4 @@
-const BASE_URL = "https://fincoach.vercel.app/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const api = {
   token: localStorage.getItem("fincoach_token"),
